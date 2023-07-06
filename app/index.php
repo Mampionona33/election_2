@@ -1,6 +1,7 @@
 <?php
 // Gestion des erreurs probables
 
+use controller\PageController;
 use lib\Autoload;
 use router\Router;
 
@@ -14,6 +15,17 @@ final class App
 {
     private $router;
     private $autoload;
+    private $pageController;
+
+    public function setPageController(PageController $pageController): void
+    {
+        $this->pageController = $pageController;
+    }
+
+    public function getPageController(): PageController
+    {
+        return $this->pageController;
+    }
 
     public function setAutoLoad(Autoload $autoload): void
     {
@@ -39,7 +51,7 @@ final class App
     {
         $this->setAutoLoad(new Autoload());
         spl_autoload_register([$this->autoload, "loadClass"]);
-
+        $this->setPageController(new PageController());
         $this->setRouter(new Router);
     }
 
@@ -51,9 +63,7 @@ final class App
          *      $this->userController->handleHome();
          * });
          */
-        $this->router->get("/", function (): void {
-            echo "test";
-        });
+        $this->router->get("/", [$this->pageController, "renderHomePage"]);
         $this->router->handleRequest();
     }
 }
