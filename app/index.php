@@ -1,24 +1,62 @@
 <?php
 // Gestion des erreurs probables
+
+use lib\Autoload;
+use router\Router;
+
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 // ----------------------------
 
+require_once './lib/Autoload.class.php';
 
-$uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+final class App
+{
+    private $router;
+    private $autoload;
 
-switch ($uri) {
-    case '/':
-        if (isset($_GET)) {
-            http_response_code(200);
-            $content = "Hello word";
-        }
-        break;
+    public function setAutoLoad(Autoload $autoload): void
+    {
+        $this->autoload = $autoload;
+    }
 
-    default:
-        http_response_code(404);
-        include_once "views/page_not_found.php";
-        break;
+    public function getAutoLoad(): Autoload
+    {
+        return $this->autoload;
+    }
+
+    public function setRouter(Router $router): void
+    {
+        $this->router = $router;
+    }
+
+    public function getRouter(): Router
+    {
+        return $this->router;
+    }
+
+    public function __construct()
+    {
+        $this->setAutoLoad(new Autoload());
+        spl_autoload_register([$this->autoload, "loadClass"]);
+
+        $this->setRouter(new Router);
+    }
+
+    public function __invoke()
+    {
+        /**
+         * equivalent a :
+         * $this->router->get("/", function () {
+         *      $this->userController->handleHome();
+         * });
+         */
+        $this->router->get("/", function (): void {
+            echo "test";
+        });
+        $this->router->handleRequest();
+    }
 }
 
-require_once "template/template.php";
+$app = new App();
+$app();
