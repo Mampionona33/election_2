@@ -64,6 +64,8 @@ final class App
          * });
          */
         $this->router->get("/", [$this->pageController, "renderHomePage"]);
+        $this->router->get("/login", [$this->pageController, "renderLoginPage"]);
+
         $this->router->handleRequest();
     }
 }

@@ -24,6 +24,7 @@ class HomePage
         return $this->authentificationController;
     }
 
+
     public function setNavbar(Navbar $navBar): void
     {
         $this->navBar = $navBar;
@@ -87,7 +88,7 @@ class HomePage
         HTML;
     }
 
-    public function render()
+    public function render(): void
     {
         $this->template->render();
     }
