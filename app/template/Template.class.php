@@ -2,11 +2,23 @@
 
 namespace template;
 
+
 class Template
 {
     private $title;
     private $body;
     private $navbar;
+    private $sidebar;
+
+    public function setSidebar(string $sidebar): void
+    {
+        $this->sidebar = $sidebar;
+    }
+
+    public function getSidebar(): string
+    {
+        return $this->sidebar;
+    }
 
     public function setNavbar(mixed $navbar): void
     {
@@ -43,6 +55,7 @@ class Template
         $title = $this->title;
         $body = $this->body;
         $navbar = $this->navbar;
+        $sidebar = $this->sidebar;
 
         return <<<HTML
         <!DOCTYPE html>
@@ -58,6 +71,7 @@ class Template
 
             <body>
                 $navbar
+                $sidebar
                 <div class="container">
                     $body
                 </div>

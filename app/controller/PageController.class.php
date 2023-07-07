@@ -78,12 +78,22 @@ class PageController
 
     public function renderDashboard(): void
     {
-        echo $this->dashboard->render();
+        if ($this->authController->isUserLogged()) {
+            echo $this->dashboard->render();
+        } else {
+            $this->redirectToVisitorHome();
+        }
     }
 
     private function  redirectToDashboard(): void
     {
         header("Location: /dashboard");
+        exit();
+    }
+
+    private function redirectToVisitorHome(): void
+    {
+        header("Location: /");
         exit();
     }
 }
