@@ -6,6 +6,7 @@ use Error;
 
 class AuthController
 {
+
     function __construct()
     {
     }
@@ -15,6 +16,7 @@ class AuthController
         if (isset($_POST)) {
             if (isset($_POST["email"]) && isset($_POST["password"])) {
                 var_dump($_POST);
+                exit();
             } else {
                 throw new Error("Obligatory value required", 1);
             }

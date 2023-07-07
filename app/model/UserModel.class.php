@@ -47,4 +47,10 @@ class UserModel
         $this->dataManipulator = new DataManipulator();
         $this->dataManipulator->createTable($this->tableName, $this->columns);
     }
+
+    public function getByEmail($user): array
+    {
+        $query = "email = '{$user["email"]}'";
+        return $this->dataManipulator->getData($this->tableName, $query);
+    }
 }

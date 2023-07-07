@@ -71,7 +71,7 @@ class DataManipulator
 
     public function createTable(string $tableName, string $columnsDef): void
     {
-        $this->setSqlFile(__DIR__ . "create_table.sql");
+        $this->setSqlFile(__DIR__ . "/create_table.sql");
         $sql = file_get_contents($this->sqlFile);
 
         $this->setStmt($this->conn->prepare($sql));
@@ -80,5 +80,21 @@ class DataManipulator
         $this->stmt->bindParam(':columnsDef', $columnsDef, PDO::PARAM_STR);
 
         $this->stmt->execute();
+    }
+
+
+    public function getData($tableName, $query): array
+    {
+        $this->setSqlFile(__DIR__ . "/get_data.sql");
+        $sql = file_get_contents($this->sqlFile);
+
+        $this->setStmt($this->conn->prepare($sql));
+
+        $this->stmt->bindParam(':tableName', $tableName, PDO::PARAM_STR);
+        $this->stmt->bindParam(':query', $query, PDO::PARAM_STR);
+
+        $this->stmt->execute();
+
+        return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
