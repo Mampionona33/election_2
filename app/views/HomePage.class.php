@@ -4,7 +4,7 @@ namespace views;
 
 use controller\AuthController;
 use template\Template;
-use views\Navbar;
+use lib\Navbar;
 
 class HomePage
 {

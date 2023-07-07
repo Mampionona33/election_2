@@ -1,6 +1,6 @@
 <?php
 
-namespace views;
+namespace lib;
 
 use controller\AuthController;
 
