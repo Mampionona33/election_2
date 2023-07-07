@@ -50,7 +50,7 @@ class UserModel
 
     public function getByEmail($user): array
     {
-        $query = "email = '{$user["email"]}'";
+        $query = "email = '{$user["email"]}' AND password= '{$user["password"]}'";
         return $this->dataManipulator->getData($this->tableName, $query);
     }
 }

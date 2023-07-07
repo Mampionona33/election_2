@@ -66,6 +66,7 @@ final class App
         $this->setPageController(new PageController());
         $this->setRouter(new Router);
         $this->authController = new AuthController();
+        session_save_path(__DIR__ . "/tmp");
     }
 
     public function __invoke()

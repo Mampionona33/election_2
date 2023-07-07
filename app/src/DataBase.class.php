@@ -77,10 +77,10 @@ final class DataBase
         $this->setPassword("pass");
         $this->setUser("root");
         $this->setHost("mysql");
-        $this->setDsn("mysql:host = $this->host; dbname= $this->dbName");
+        $this->setDsn($this->dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->dbName);
     }
 
-    public function connect(): PDO
+    public function connect()
     {
         try {
             $this->setConnection(new PDO($this->dsn, $this->user, $this->password));

@@ -2,6 +2,7 @@
 
 namespace SQL;
 
+use Error;
 use PDO;
 use src\DataBase;
 
@@ -66,35 +67,50 @@ class DataManipulator
     public function __construct()
     {
         $this->db = new DataBase();
-        $this->setConn($this->db->connect());
+        $this->conn = $this->db->connect();
     }
 
     public function createTable(string $tableName, string $columnsDef): void
     {
         $this->setSqlFile(__DIR__ . "/create_table.sql");
-        $sql = file_get_contents($this->sqlFile);
 
-        $this->setStmt($this->conn->prepare($sql));
+        if ($this->sqlFile) {
+            $this->setSql(file_get_contents($this->sqlFile));
 
-        $this->stmt->bindParam(':tableName', $tableName, PDO::PARAM_STR);
-        $this->stmt->bindParam(':columnsDef', $columnsDef, PDO::PARAM_STR);
+            $columnsArray = explode(',', $columnsDef);
+            $columnsArray = array_map('trim', $columnsArray);
+            $columnsArray = array_map('strtolower', $columnsArray);
+            $columnsArray = array_unique($columnsArray);
 
-        $this->stmt->execute();
+            $tableColumns = implode(',', array_unique($columnsArray));
+
+            $sql = str_replace(':tableName', $tableName, $this->sql);
+            $sql = str_replace(':columnsDef', $tableColumns, $sql);
+
+            $this->setStmt($this->conn->prepare($sql));
+            $this->stmt->execute();
+        }
     }
-
 
     public function getData($tableName, $query): array
     {
         $this->setSqlFile(__DIR__ . "/get_data.sql");
-        $sql = file_get_contents($this->sqlFile);
 
-        $this->setStmt($this->conn->prepare($sql));
+        if (is_file($this->sqlFile)) {
+            $this->setSql(file_get_contents($this->sqlFile));
 
-        $this->stmt->bindParam(':tableName', $tableName, PDO::PARAM_STR);
-        $this->stmt->bindParam(':query', $query, PDO::PARAM_STR);
+            // Préparer la requête SELECT avec les paramètres
+            $selectSql = "SELECT * FROM $tableName WHERE $query";
 
-        $this->stmt->execute();
+            // Préparer et exécuter la requête préparée
+            $stmt = $this->conn->prepare($selectSql);
 
-        return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt->execute();
+
+            // Récupérer les résultats
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $result;
+        }
     }
 }
