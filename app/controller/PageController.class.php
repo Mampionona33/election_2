@@ -70,6 +70,9 @@ class PageController
 
     public function renderLoginPage(): void
     {
+        if ($this->authController->isUserLogged()) {
+            $this->redirectToDashboard();
+        }
         echo $this->loginPage->render();
     }
 
