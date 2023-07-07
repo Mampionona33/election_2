@@ -2,7 +2,7 @@
 
 namespace views;
 
-use controller\AuthentificationController;
+use controller\AuthController;
 use template\Template;
 use views\Navbar;
 
@@ -12,16 +12,16 @@ class HomePage
     private $body;
     private $template;
     private $navBar;
-    private $authentificationController;
+    private $authController;
 
-    public function setauthentificationController(AuthentificationController $authentificationController): void
+    public function setauthController(AuthController $authController): void
     {
-        $this->authentificationController = $authentificationController;
+        $this->authController = $authController;
     }
 
-    public function getAuthentificationController(): AuthentificationController
+    public function getauthController(): AuthController
     {
-        return $this->authentificationController;
+        return $this->authController;
     }
 
 
@@ -79,7 +79,7 @@ class HomePage
         $this->template->setBody($this->body);
     }
 
-    private function generateBody(): string
+    protected function generateBody(): string
     {
         return <<<HTML
         <div>

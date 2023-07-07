@@ -23,14 +23,17 @@ class Navbar
         $this->setAuthController(new AuthController());
     }
 
-
     private function logButton(): string
     {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         if (!$this->authController->isUserLogged()) {
             return '<a class="navbar-brand" href="/login">login</a>';
         }
         return '<a class="navbar-brand" href="/logout">log out</a>';
     }
+
 
 
     private function renderMenuButton(): mixed
@@ -45,13 +48,10 @@ class Navbar
         return null;
     }
 
-
-
     public function render(): string
     {
         $menuButton = $this->renderMenuButton();
         $logButton = $this->logButton();
-
         return <<<HTML
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">

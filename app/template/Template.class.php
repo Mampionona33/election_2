@@ -8,7 +8,7 @@ class Template
     private $body;
     private $navbar;
 
-    public function setNavbar(string $navbar): void
+    public function setNavbar(mixed $navbar): void
     {
         $this->navbar = $navbar;
     }
@@ -71,5 +71,6 @@ class Template
     public function render(): void
     {
         echo $this->documentPage();
+        exit();
     }
 }

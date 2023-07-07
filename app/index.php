@@ -63,10 +63,9 @@ final class App
     {
         $this->setAutoLoad(new Autoload());
         spl_autoload_register([$this->autoload, "loadClass"]);
-        $this->setPageController(new PageController());
-        $this->setRouter(new Router);
         $this->authController = new AuthController();
-        session_save_path(__DIR__ . "/tmp");
+        $this->setRouter(new Router);
+        $this->setPageController(new PageController());
     }
 
     public function __invoke()
@@ -80,10 +79,13 @@ final class App
         $this->router->get("/", [$this->pageController, "renderHomePage"]);
         $this->router->get("/login", [$this->pageController, "renderLoginPage"]);
         $this->router->post("/login", [$this->authController, "handleLogin"]);
+        $this->router->get("/dashboard", [$this->pageController, 'renderDashboard']);
+        $this->router->get("/logout", [$this->authController, "handleLogout"]);
 
         $this->router->handleRequest();
     }
 }
 
+session_save_path(__DIR__ . "/tmp");
 $app = new App();
 $app();

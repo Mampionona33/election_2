@@ -2,7 +2,6 @@
 
 namespace views;
 
-use template\Template;
 
 class LoginPage extends HomePage
 {
@@ -11,12 +10,13 @@ class LoginPage extends HomePage
     public function __construct()
     {
         parent::__construct();
-        $this->template = new Template();
+        $this->template = parent::getTemplate();
+        $this->template->setNavbar(null);
         $this->template->setTilte("Login");
         $this->setBody($this->generateBody());
     }
 
-    private function generateBody(): string
+    protected function generateBody(): string
     {
         return <<<HTML
         <div class="d-flex w-100 justify-content-center align-items-center" style="height: 100vh;">

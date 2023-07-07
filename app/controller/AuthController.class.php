@@ -41,7 +41,10 @@ class AuthController
             if (isset($_POST["email"]) && isset($_POST["password"])) {
                 $this->setUserLogged($this->userModel->getByEmail($_POST));
                 if (!empty($this->userLogged)) {
-                    session_start();
+
+                    if (session_status() === PHP_SESSION_NONE) {
+                        session_start();
+                    }
                     $_SESSION["user"] = $this->userLogged;
                     header("Location: /dashboard");
                     exit();
