@@ -1,6 +1,7 @@
 <?php
 // Gestion des erreurs probables
 
+use controller\AuthController;
 use controller\PageController;
 use lib\Autoload;
 use router\Router;
@@ -16,6 +17,17 @@ final class App
     private $router;
     private $autoload;
     private $pageController;
+    private $authController;
+
+    public function setAuhController(AuthController $authController): void
+    {
+        $this->authController = $authController;
+    }
+
+    public function getAuthController(): AuthController
+    {
+        return $this->authController;
+    }
 
     public function setPageController(PageController $pageController): void
     {
@@ -53,6 +65,7 @@ final class App
         spl_autoload_register([$this->autoload, "loadClass"]);
         $this->setPageController(new PageController());
         $this->setRouter(new Router);
+        $this->authController = new AuthController();
     }
 
     public function __invoke()
@@ -65,6 +78,7 @@ final class App
          */
         $this->router->get("/", [$this->pageController, "renderHomePage"]);
         $this->router->get("/login", [$this->pageController, "renderLoginPage"]);
+        $this->router->post("/login", [$this->authController, "handleLogin"]);
 
         $this->router->handleRequest();
     }

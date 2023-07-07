@@ -2,31 +2,31 @@
 
 namespace views;
 
-use controller\AuthentificationController;
+use controller\AuthController;
 
 class Navbar
 {
-    private $authentificationController;
+    private $authController;
 
-    public function setauthentificationController(AuthentificationController $authentificationController): void
+    public function setAuthController(AuthController $AuthController): void
     {
-        $this->authentificationController = $authentificationController;
+        $this->authController = $AuthController;
     }
 
-    public function getAuthentificationController(): AuthentificationController
+    public function getAuthController(): AuthController
     {
-        return $this->authentificationController;
+        return $this->authController;
     }
 
     public function __construct()
     {
-        $this->setauthentificationController(new AuthentificationController());
+        $this->setAuthController(new AuthController());
     }
 
 
     private function logButton(): string
     {
-        if (!$this->authentificationController->isUserLogged()) {
+        if (!$this->authController->isUserLogged()) {
             return '<a class="navbar-brand" href="/login">login</a>';
         }
         return '<a class="navbar-brand" href="/logout">log out</a>';
@@ -35,7 +35,7 @@ class Navbar
 
     private function renderMenuButton(): mixed
     {
-        if ($this->authentificationController->isUserLogged()) {
+        if ($this->authController->isUserLogged()) {
             return <<<HTML
                 <button class="btn btn-primary d-flex align-items-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
                     <span class="material-icons">menu</span>
