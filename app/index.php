@@ -86,6 +86,6 @@ final class App
     }
 }
 
-session_save_path(__DIR__ . "/tmp");
+// session_save_path(__DIR__ . "/tmp");
 $app = new App();
 $app();
