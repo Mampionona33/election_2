@@ -65,7 +65,7 @@ final class App
         spl_autoload_register([$this->autoload, "loadClass"]);
         $this->authController = new AuthController();
         $this->setRouter(new Router);
-        $this->setPageController(new PageController());
+        $this->pageController = new PageController($this->authController);
     }
 
     public function __invoke()
@@ -87,5 +87,6 @@ final class App
 }
 
 // session_save_path(__DIR__ . "/tmp");
+
 $app = new App();
 $app();

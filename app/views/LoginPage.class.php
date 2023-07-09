@@ -2,17 +2,15 @@
 
 namespace views;
 
+use template\Template;
 
-class LoginPage extends HomePage
+class LoginPage extends Template
 {
     private $template;
 
     public function __construct()
     {
-        parent::__construct();
-        $this->template = parent::getTemplate();
-        $this->template->setNavbar(null);
-        $this->template->setTilte("Login");
+        $this->setTilte("Login");
         $this->setBody($this->generateBody());
     }
 
@@ -46,11 +44,5 @@ class LoginPage extends HomePage
             </div>
         </div>
         HTML;
-    }
-
-    public function render(): void
-    {
-        $this->template->setBody($this->getBody());
-        $this->template->render();
     }
 }

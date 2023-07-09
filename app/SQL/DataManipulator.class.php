@@ -113,4 +113,22 @@ class DataManipulator
             return $result;
         }
     }
+
+    public function executeQuery($query): array
+    {
+        $this->setSqlFile(__DIR__ . "executeQuery.sql");
+        if (is_file($this->sqlFile)) {
+            $this->setSql(file_get_contents($this->sqlFile));
+
+            // Préparer et exécuter la requête préparée
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->execute();
+
+            // Récupérer les résultats
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $result;
+        }
+    }
 }

@@ -6,13 +6,22 @@ use controller\AuthController;
 use template\Template;
 use lib\Navbar;
 
-class HomePage
+class HomePage extends Template
 {
-    private $title;
-    private $body;
-    private $template;
-    private $navBar;
+
+    private $navBarObj;
     private $authController;
+
+
+    public function setNavBarObj(Navbar $navBarObj): void
+    {
+        $this->navBarObj = $navBarObj;
+    }
+
+    public function getNavBarObj(): Navbar
+    {
+        return $this->navBarObj;
+    }
 
     public function setauthController(AuthController $authController): void
     {
@@ -24,59 +33,12 @@ class HomePage
         return $this->authController;
     }
 
-
-    public function setNavbar(Navbar $navBar): void
-    {
-        $this->navBar = $navBar;
-    }
-
-    public function getNavbar(): Navbar
-    {
-        return $this->navBar;
-    }
-
-    public function setTemplate(Template $template): void
-    {
-        $this->template = $template;
-    }
-
-    public function getTemplate(): Template
-    {
-        return $this->template;
-    }
-
-    public function setTitle(string $title): void
-    {
-        $this->title = $title;
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    public function setBody(string $body): void
-    {
-        $this->body = $body;
-    }
-
-    public function getBody(): string
-    {
-        return $this->body;
-    }
-
     public function __construct()
     {
-        $this->setTemplate(new Template());
-
-        $this->setTitle("Home");
+        $this->setTilte('Home');
+        $this->setNavBarObj(new Navbar());
+        $this->setNavbar($this->navBarObj->render());
         $this->setBody($this->generateBody());
-
-        $this->setNavbar(new Navbar());
-
-        $this->template->setNavbar($this->navBar->render());
-        $this->template->setTilte($this->title);
-        $this->template->setBody($this->body);
     }
 
     protected function generateBody(): string
@@ -86,10 +48,5 @@ class HomePage
             test 123
         </div>
         HTML;
-    }
-
-    public function render(): void
-    {
-        $this->template->render();
     }
 }

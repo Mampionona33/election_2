@@ -52,12 +52,12 @@ class PageController
         return $this->homePage;
     }
 
-    public function __construct()
+    public function __construct(AuthController $authController)
     {
-        $this->authController = new AuthController();
-        $this->setHomePage(new HomePage());
+        $this->authController = $authController;
         $this->setLoginPage(new LoginPage());
-        $this->setDashboard(new Dashboard());
+        $this->setHomePage(new HomePage());
+        $this->dashboard = new Dashboard($this->authController);
     }
 
     public function renderHomePage(): void
@@ -79,6 +79,8 @@ class PageController
     public function renderDashboard(): void
     {
         if ($this->authController->isUserLogged()) {
+            echo "PageController";
+            var_dump($this->authController->getUserLogged());
             echo $this->dashboard->render();
         } else {
             $this->redirectToVisitorHome();

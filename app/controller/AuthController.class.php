@@ -9,6 +9,17 @@ class AuthController
 {
     private $userLogged;
     private $userModel;
+    private $userIdGroupe;
+
+    public function setUserIdGroupe(mixed $userIdGroupe): void
+    {
+        $this->userIdGroupe = $userIdGroupe;
+    }
+
+    public function getUserIdGroupe(): mixed
+    {
+        return $this->userIdGroupe;
+    }
 
     public function  setUserModel(UserModel $userModel): void
     {
@@ -25,10 +36,14 @@ class AuthController
         $this->userLogged = $userLogged;
     }
 
-    public function getUserLogged(): array
+    public function getUserLogged()
     {
-        return $this->userLogged;
+        if (isset($_SESSION["user"])) {
+            return $_SESSION["user"];
+        }
+        return null;
     }
+
 
     function __construct()
     {
@@ -40,12 +55,14 @@ class AuthController
         if (isset($_POST)) {
             if (isset($_POST["email"]) && isset($_POST["password"])) {
                 $this->setUserLogged($this->userModel->getByEmail($_POST));
+                // session_save_path(__DIR__ . "/tmp");
                 if (!empty($this->userLogged)) {
-
                     if (session_status() === PHP_SESSION_NONE) {
                         session_start();
                     }
                     $_SESSION["user"] = $this->userLogged;
+                    // $this->setUserLogged($_SESSION["user"]);
+
                     header("Location: /dashboard");
                     exit();
                 }
@@ -70,4 +87,15 @@ class AuthController
         session_destroy();
         exit();
     }
+
+    // public function getUserLoggedIdGroupe(): void
+    // {
+    //     if (
+    //         isset($_SESSION["user"])
+    //         &&  isset($_SESSION["user"][0]["id_groupe"])
+    //     ) {
+    //         var_dump($_SESSION["user"][0]["id_groupe"]);
+    //         $this->setUserIdGroupe($_SESSION["user"][0]["id_groupe"]);
+    //     }
+    // }
 }

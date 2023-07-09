@@ -2,37 +2,65 @@
 
 namespace views;
 
+use controller\AuthController;
+use lib\Navbar;
 use lib\Sidebar;
+use template\Template;
 
-class Dashboard extends HomePage
+class Dashboard extends Template
 {
-    private $template;
-    private $sidebar;
+    private $title;
+    private $body;
+    private $navBar;
+    private $userIdGroupe;
+    private $authController;
+    private $navBarObj;
 
-    public function setSidebar(Sidebar $sidebar): void
+    public function setNavBarObj(Navbar $navBarObj): void
     {
-        $this->sidebar = $sidebar;
+        $this->navBarObj = $navBarObj;
     }
 
-    public function getSidebar(): Sidebar
+    public function getNavBarObj(): Navbar
     {
-        return $this->sidebar;
+        return $this->navBarObj;
     }
 
-    public function __construct()
+    public function setUserIdGroupe(int $userIdGroupe): void
     {
-        parent::__construct();
-        $this->template = parent::getTemplate();
-        $this->template->setTilte("Dashboard");
-        $this->setSidebar(new Sidebar());
-        $this->template->setSidebar($this->sidebar->render());
+        $this->userIdGroupe = $userIdGroupe;
+    }
+
+    public function getUserIdGroupe(): int
+    {
+        return $this->userIdGroupe;
+    }
+
+    public function setauthController(AuthController $authController): void
+    {
+        $this->authController = $authController;
+    }
+
+    public function getauthController(): AuthController
+    {
+        return $this->authController;
+    }
+
+
+    public function __construct(AuthController $authController)
+    {
+        $this->setauthController($authController);
+        $this->setNavBarObj(new Navbar());
+        $this->setNavbar($this->navBarObj->render());
+        $this->setTilte("Dashboard");
         $this->setBody($this->generateBody());
     }
 
     protected function generateBody(): string
     {
+        $userIdGroupe = $this->userIdGroupe;
         return <<<HTML
-        <div>Dashboard</div>
+        <div>Dashboard test, $userIdGroupe</div>
         HTML;
     }
 }

@@ -20,7 +20,7 @@ class Template
         return $this->sidebar;
     }
 
-    public function setNavbar(mixed $navbar): void
+    public function setNavbar(string $navbar): void
     {
         $this->navbar = $navbar;
     }

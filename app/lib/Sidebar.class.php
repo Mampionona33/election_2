@@ -27,6 +27,10 @@ class Sidebar
         return $this->sidebarContents;
     }
 
+    public function __construct()
+    {
+    }
+
     public function render(): string
     {
         if (!empty($this->sidebarContents)) {
