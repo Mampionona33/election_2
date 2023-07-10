@@ -81,6 +81,7 @@ final class App
         $this->router->post("/login", [$this->authController, "handleLogin"]);
         $this->router->get("/dashboard", [$this->pageController, 'renderDashboard']);
         $this->router->get("/logout", [$this->authController, "handleLogout"]);
+        $this->router->get("/candidat", [$this->pageController, "handleCandidat"]);
 
         $this->router->handleRequest();
     }

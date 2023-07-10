@@ -3,6 +3,7 @@
 namespace views;
 
 use controller\AuthController;
+use controller\CandidatController;
 use template\Template;
 use lib\Navbar;
 
@@ -11,7 +12,17 @@ class HomePage extends Template
 
     private $navBarObj;
     private $authController;
+    private $candidatController;
 
+    public function setCandidatController(CandidatController $candidatController): void
+    {
+        $this->candidatController = $candidatController;
+    }
+
+    public function getCandidatController(): CandidatController
+    {
+        return $this->candidatController;
+    }
 
     public function setNavBarObj(Navbar $navBarObj): void
     {
@@ -38,6 +49,7 @@ class HomePage extends Template
         $this->setTilte('Home');
         $this->setNavBarObj(new Navbar());
         $this->setNavbar($this->navBarObj->render());
+        $this->candidatController = new CandidatController();
         $this->setBody($this->generateBody());
     }
 
@@ -45,7 +57,7 @@ class HomePage extends Template
     {
         return <<<HTML
         <div>
-            test 123
+            Home page
         </div>
         HTML;
     }

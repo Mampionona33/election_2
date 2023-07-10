@@ -39,7 +39,7 @@ class Dashboard extends Template
         return $this->authorizationController;
     }
 
-    public function  setUserAuthorizedRoles($userAuthorizedRoles): void
+    public function setUserAuthorizedRoles($userAuthorizedRoles): void
     {
         $this->userAuthorizedRoles = $userAuthorizedRoles;
     }
@@ -69,12 +69,12 @@ class Dashboard extends Template
         return $this->userIdGroupe;
     }
 
-    public function setauthController(AuthController $authController): void
+    public function setAuthController(AuthController $authController): void
     {
         $this->authController = $authController;
     }
 
-    public function getauthController(): AuthController
+    public function getAuthController(): AuthController
     {
         return $this->authController;
     }
@@ -82,12 +82,11 @@ class Dashboard extends Template
 
     public function __construct(AuthController $authController)
     {
-        $this->setauthController($authController);
+        $this->setAuthController($authController);
         $this->setAuthorizationController(new AuthorisationController());
         $this->setNavBarObj(new Navbar());
 
         if ($this->authController->isUserLogged()) {
-
             $this->setUserIdGroupe($this->authController->getUserLogged()[0]["id_groupe"]);
             $this->setUserAuthorizedRoles($this->authorizationController->getGroupeRoles($this->userIdGroupe));
             $this->hasRole($this->userAuthorizedRoles);
@@ -96,7 +95,6 @@ class Dashboard extends Template
             $this->sidebarObj->setSidebarContents($this->generateSidebarItems());
             $this->setSidebar($this->sidebarObj->render());
         }
-
 
         $this->setNavbar($this->navBarObj->render());
         $this->setTilte("Dashboard");
@@ -125,10 +123,10 @@ class Dashboard extends Template
         return false;
     }
 
-
     private function generateSidebarItems(): array
     {
         $buttons = [];
+        $buttons[] = ['path' => '/', 'label' => 'Accueil'];
         $requiredRolesCandidat = ['create_candidat', 'update_candidat', 'delete_candidat'];
         $requiredRolesUser = ['create_user', 'update_user', 'delete_user'];
         $requiredRolesRole = ['create_role', 'update_role', 'delete_role'];

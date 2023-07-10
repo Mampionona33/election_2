@@ -5,6 +5,7 @@ namespace controller;
 use views\Dashboard;
 use views\HomePage;
 use views\LoginPage;
+use views\ManageCandidat;
 
 class PageController
 {
@@ -12,6 +13,17 @@ class PageController
     private $loginPage;
     private $dashboard;
     private $authController;
+    private $manageCandidat;
+
+    public function setManageCandidat(ManageCandidat $manageCandidat): void
+    {
+        $this->manageCandidat = $manageCandidat;
+    }
+
+    public function getManageCandidat(): ManageCandidat
+    {
+        return $this->manageCandidat;
+    }
 
     public function setAuthController(AuthController $authController): void
     {
@@ -57,6 +69,7 @@ class PageController
         $this->authController = $authController;
         $this->setLoginPage(new LoginPage());
         $this->setHomePage(new HomePage());
+        $this->manageCandidat = new ManageCandidat($this->authController);
         $this->dashboard = new Dashboard($this->authController);
     }
 
@@ -76,11 +89,20 @@ class PageController
         echo $this->loginPage->render();
     }
 
+    public function handleCandidat(): void
+    {
+        if ($this->authController->isUserLogged()) {
+
+            echo $this->manageCandidat->render();
+        } else {
+            $this->redirectToVisitorHome();
+        }
+    }
+
     public function renderDashboard(): void
     {
         if ($this->authController->isUserLogged()) {
-            // echo "PageController";
-            // var_dump($this->authController->getUserLogged());
+
             echo $this->dashboard->render();
         } else {
             $this->redirectToVisitorHome();
@@ -92,6 +114,8 @@ class PageController
         header("Location: /dashboard");
         exit();
     }
+
+
 
     private function redirectToVisitorHome(): void
     {
