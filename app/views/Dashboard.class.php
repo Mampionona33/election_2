@@ -10,9 +10,6 @@ use template\Template;
 
 class Dashboard extends Template
 {
-    private $title;
-    private $body;
-    private $navBar;
     private $userIdGroupe;
     private $authController;
     private $navBarObj;
