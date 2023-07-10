@@ -3,6 +3,7 @@
 namespace views;
 
 use controller\AuthController;
+use controller\AuthorisationController;
 use lib\Navbar;
 use lib\Sidebar;
 use template\Template;
@@ -15,6 +16,28 @@ class Dashboard extends Template
     private $userIdGroupe;
     private $authController;
     private $navBarObj;
+    private $userAuthorizedRoles;
+    private $authorizationController;
+
+    public function setAuthorizationController(AuthorisationController $authorizationController): void
+    {
+        $this->authorizationController = $authorizationController;
+    }
+
+    public function getAuhtorizationController(): AuthorisationController
+    {
+        return $this->authorizationController;
+    }
+
+    public function  setUserAuthorizedRoles($userAuthorizedRoles): void
+    {
+        $this->userAuthorizedRoles = $userAuthorizedRoles;
+    }
+
+    public function getUserAuthorizedRoles()
+    {
+        return $this->userAuthorizedRoles;
+    }
 
     public function setNavBarObj(Navbar $navBarObj): void
     {
@@ -50,6 +73,9 @@ class Dashboard extends Template
     public function __construct(AuthController $authController)
     {
         $this->setauthController($authController);
+        $this->setUserIdGroupe($this->authController->getUserLogged()[0]["id_groupe"]);
+        $this->setAuthorizationController(new AuthorisationController());
+        $this->setUserAuthorizedRoles($this->authorizationController->getGroupeRoles($this->userIdGroupe));
         $this->setNavBarObj(new Navbar());
         $this->setNavbar($this->navBarObj->render());
         $this->setTilte("Dashboard");
@@ -58,9 +84,17 @@ class Dashboard extends Template
 
     protected function generateBody(): string
     {
+        var_dump($this->userAuthorizedRoles);
         $userIdGroupe = $this->userIdGroupe;
         return <<<HTML
         <div>Dashboard test, $userIdGroupe</div>
+        HTML;
+    }
+
+    private function generateSidebarItems(): string
+    {
+        return <<<HTML
+        <div>test</div>
         HTML;
     }
 }

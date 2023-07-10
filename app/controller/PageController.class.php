@@ -79,8 +79,8 @@ class PageController
     public function renderDashboard(): void
     {
         if ($this->authController->isUserLogged()) {
-            echo "PageController";
-            var_dump($this->authController->getUserLogged());
+            // echo "PageController";
+            // var_dump($this->authController->getUserLogged());
             echo $this->dashboard->render();
         } else {
             $this->redirectToVisitorHome();

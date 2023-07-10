@@ -47,9 +47,10 @@ class AuthorisationModel
         $this->dataManipulator->createTable($this->tableName, $this->columns);
     }
 
-    public function getGroupeRoles($id_groupe): array
+    public function getGroupeRoles(int $groupeId): mixed
     {
-        $query = "SELECT name FROM Role WHERE id_role IN (SELECT id_role FROM Authorisation WHERE id_groupe = $id_groupe);";
-        return $this->dataManipulator->executeQuery($this->tableName, $query);
+        $query = "SELECT name FROM Role WHERE id_role IN (SELECT id_role FROM " . $this->tableName . " WHERE id_groupe = " . $groupeId . ")";
+        $result = $this->dataManipulator->executeQuery($query);
+        return $result;
     }
 }
