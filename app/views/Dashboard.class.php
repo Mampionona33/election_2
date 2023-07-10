@@ -18,6 +18,19 @@ class Dashboard extends Template
     private $navBarObj;
     private $userAuthorizedRoles;
     private $authorizationController;
+    private $sidebarObj;
+
+    private $sidebarContents;
+
+    public function setSidebarContents($sidebarContents): void
+    {
+        $this->sidebarContents = $sidebarContents;
+    }
+
+    public function getSidebarContents()
+    {
+        $this->sidebarContents;
+    }
 
     public function setAuthorizationController(AuthorisationController $authorizationController): void
     {
@@ -73,10 +86,21 @@ class Dashboard extends Template
     public function __construct(AuthController $authController)
     {
         $this->setauthController($authController);
-        $this->setUserIdGroupe($this->authController->getUserLogged()[0]["id_groupe"]);
         $this->setAuthorizationController(new AuthorisationController());
-        $this->setUserAuthorizedRoles($this->authorizationController->getGroupeRoles($this->userIdGroupe));
         $this->setNavBarObj(new Navbar());
+
+        if ($this->authController->isUserLogged()) {
+
+            $this->setUserIdGroupe($this->authController->getUserLogged()[0]["id_groupe"]);
+            $this->setUserAuthorizedRoles($this->authorizationController->getGroupeRoles($this->userIdGroupe));
+            $this->hasRole($this->userAuthorizedRoles);
+
+            $this->sidebarObj = new Sidebar();
+            $this->sidebarObj->setSidebarContents($this->generateSidebarItems());
+            $this->setSidebar($this->sidebarObj->render());
+        }
+
+
         $this->setNavbar($this->navBarObj->render());
         $this->setTilte("Dashboard");
         $this->setBody($this->generateBody());
@@ -84,17 +108,48 @@ class Dashboard extends Template
 
     protected function generateBody(): string
     {
-        var_dump($this->userAuthorizedRoles);
         $userIdGroupe = $this->userIdGroupe;
         return <<<HTML
         <div>Dashboard test, $userIdGroupe</div>
         HTML;
     }
 
-    private function generateSidebarItems(): string
+    private function hasRole(array $requiredRoles): bool
     {
-        return <<<HTML
-        <div>test</div>
-        HTML;
+        $userRoles = array_column($this->getUserAuthorizedRoles(), 'name');
+
+        // Vérifier si au moins l'un des rôles requis est présent dans les rôles de l'utilisateur
+        foreach ($requiredRoles as $requiredRole) {
+            if (in_array($requiredRole, $userRoles)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    private function generateSidebarItems(): array
+    {
+        $buttons = [];
+        $requiredRolesCandidat = ['create_candidat', 'update_candidat', 'delete_candidat'];
+        $requiredRolesUser = ['create_user', 'update_user', 'delete_user'];
+        $requiredRolesRole = ['create_role', 'update_role', 'delete_role'];
+        $requiredRolesGroupe = ['create_groupe', 'update_groupe', 'delete_groupe'];
+
+        if ($this->hasRole($requiredRolesCandidat)) {
+            $buttons[] = ['path' => 'candidat', 'label' => 'Gérer candidat'];
+        }
+        if ($this->hasRole($requiredRolesUser)) {
+            $buttons[] = ['path' => "user", "label" => "Gérer utilisateur"];
+        }
+        if ($this->hasRole($requiredRolesRole)) {
+            $buttons[] = ['path' => "role", "label" => "Gérer rôle"];
+        }
+        if ($this->hasRole($requiredRolesGroupe)) {
+            $buttons[] = ['path' => "groupe", "label" => "Gérer groupe"];
+        }
+
+        return $buttons;
     }
 }

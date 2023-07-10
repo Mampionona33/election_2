@@ -2,6 +2,7 @@
 
 namespace template;
 
+use lib\Sidebar;
 
 class Template
 {
