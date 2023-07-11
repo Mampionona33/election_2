@@ -38,7 +38,7 @@ class Navbar
     {
         if ($this->authController->isUserLogged()) {
             return <<<HTML
-                <button class="navbar-brand btn btn-primary d-flex align-items-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
+                <button class="navbar-brand btn btn-primary d-flex align-items-center ms-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
                     <span class="material-icons">menu</span>
                 </button>
             HTML;

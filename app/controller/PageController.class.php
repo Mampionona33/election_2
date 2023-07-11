@@ -77,6 +77,7 @@ class PageController
     {
         if ($this->authController->isUserLogged()) {
             $this->redirectToDashboard();
+            exit();
         }
         echo $this->homePage->render();
     }
@@ -92,8 +93,8 @@ class PageController
     public function handleCandidat(): void
     {
         if ($this->authController->isUserLogged()) {
-
             echo $this->manageCandidat->render();
+            exit();
         } else {
             $this->redirectToVisitorHome();
         }
@@ -114,8 +115,6 @@ class PageController
         header("Location: /dashboard");
         exit();
     }
-
-
 
     private function redirectToVisitorHome(): void
     {
