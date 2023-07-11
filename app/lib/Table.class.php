@@ -8,7 +8,7 @@ class Table
     {
         return <<<HTML
         <div>
-            test
+            table placeholder
         </div>
         HTML;
     }
