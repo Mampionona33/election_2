@@ -46,4 +46,10 @@ class CandidatModel
         $this->setDataManipulator(new DataManipulator());
         $this->dataManipulator->createTable($this->tableName, $this->columns);
     }
+
+    public function getAll(): array
+    {
+        $query = "SELECT id_candidat, name, nb_voix AS voix, CONCAT( ROUND((nb_voix * 100 / (SELECT SUM(nb_voix) FROM $this->tableName)), 2) ,' %') AS pourcentage FROM $this->tableName;";
+        return $this->dataManipulator->executeQuery($query);
+    }
 }

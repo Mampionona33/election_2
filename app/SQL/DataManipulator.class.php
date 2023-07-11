@@ -122,7 +122,6 @@ class DataManipulator
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
             return $result;
         }
     }

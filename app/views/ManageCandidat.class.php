@@ -3,38 +3,31 @@
 namespace views;
 
 use controller\AuthController;
-use lib\Table;
 
 class ManageCandidat extends BaseView
 {
-    private $table;
 
-    private function setTable(Table $table)
-    {
-        $this->table = $table;
-    }
+    private $candidaTableView;
 
-    private function getTable(): Table
+    public function setCandidatTableView(CandidatTableView $candidaTableView): void
     {
-        return $this->table;
+        $this->candidaTableView = $candidaTableView;
     }
 
     public function __construct(AuthController $authController)
     {
         parent::__construct($authController);
-        $this->setTable(new Table());
         $this->setTilte("Manage candidat");
+        $this->setCandidatTableView(new CandidatTableView());
         $this->setBody($this->generateBody());
     }
 
     protected function generateBody(): string
     {
-        $userIdGroupe = $this->userIdGroupe;
-        $table = $this->table->render();
+        $candidaTableView = $this->candidaTableView->render();
         return <<<HTML
         <div>
-            Manage Candidat , id_groupe = $userIdGroupe
-            <div>$table</div>
+            $candidaTableView
         </div>
         HTML;
     }
