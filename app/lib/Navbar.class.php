@@ -25,9 +25,9 @@ class Navbar
 
     private function logButton(): string
     {
-        // if (session_status() === PHP_SESSION_NONE) {
-        //     session_start();
-        // }
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         if (!$this->authController->isUserLogged()) {
             return '<a class="navbar-brand" href="/login">login</a>';
         }
