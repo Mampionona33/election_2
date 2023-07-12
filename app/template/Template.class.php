@@ -70,7 +70,7 @@ class Template
                 <title>$title</title>
             </head>
 
-            <body>
+            <body class="custom-bc">
                 $navbar
                 $sidebar
                 <div class="container">
