@@ -110,44 +110,46 @@ class Table
         $data = $this->getData();
         $bodyHTML = '';
 
-        foreach ($data as $row) {
-            $bodyHTML .= '<tr>';
+        if (empty($data)) {
+            $colspan = count($this->getHeaders()) + ($this->editButtonState || $this->deleteButtonState ? 1 : 0);
+            $bodyHTML .= '<tr><td colspan="' . $colspan . '">No data found</td></tr>';
+        } else {
+            foreach ($data as $row) {
+                $bodyHTML .= '<tr>';
 
-            // Récupérer la clé de l'ID
-            $rowId = reset($row);
+                // Récupérer la clé de l'ID
+                $rowId = reset($row);
 
-            // Vérifier si la première colonne doit être masquée
-            if ($this->hideFirstColumn) {
-                array_shift($row);
-            }
-
-            foreach ($row as $cell) {
-                $bodyHTML .= "<td>$cell</td>";
-            }
-
-            // Vérifier si la colonne "Actions" doit être affichée
-            if ($this->editButtonState || $this->deleteButtonState) {
-                $actionsHTML = '';
-
-                if ($this->editButtonState) {
-                    $actionsHTML .= '<button type="button" class="btn btn-primary" data-id="edit_' . $rowId . '">Modifier</button>';
+                // Vérifier si la première colonne doit être masquée
+                if ($this->hideFirstColumn) {
+                    array_shift($row);
                 }
 
-                if ($this->deleteButtonState) {
-                    $actionsHTML .= '<button type="button" class="btn btn-danger" data-id="delete_' . $rowId . '">Supprimer</button>';
+                foreach ($row as $cell) {
+                    $bodyHTML .= "<td>$cell</td>";
                 }
 
-                $bodyHTML .= '<td class="d-flex flex-wrap gap-1 justify-content-center">' . $actionsHTML . '</td>';
-            }
+                // Vérifier si la colonne "Actions" doit être affichée
+                if ($this->editButtonState || $this->deleteButtonState) {
+                    $actionsHTML = '';
 
-            $bodyHTML .= '</tr>';
+                    if ($this->editButtonState) {
+                        $actionsHTML .= '<button type="button" class="btn btn-primary" data-id="edit_' . $rowId . '">Modifier</button>';
+                    }
+
+                    if ($this->deleteButtonState) {
+                        $actionsHTML .= '<button type="button" class="btn btn-danger" data-id="delete_' . $rowId . '">Supprimer</button>';
+                    }
+
+                    $bodyHTML .= '<td class="d-flex flex-wrap gap-1 justify-content-center">' . $actionsHTML . '</td>';
+                }
+
+                $bodyHTML .= '</tr>';
+            }
         }
 
         return $bodyHTML;
     }
-
-
-
 
     protected function generateAddButton(): mixed
     {
