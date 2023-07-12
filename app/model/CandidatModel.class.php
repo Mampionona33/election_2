@@ -9,7 +9,20 @@ class CandidatModel
     private $tableName;
     private $columns;
     private $dataManipulator;
+    private $query;
 
+    /**
+     * getter and setter
+     */
+    public function setQuery(string $query): void
+    {
+        $this->query = $query;
+    }
+
+    public function getQuery(): string
+    {
+        return $this->query;
+    }
     public function setTableName(string $tableName): void
     {
         $this->tableName = $tableName;
@@ -38,7 +51,7 @@ class CandidatModel
     {
         return $this->dataManipulator;
     }
-
+    // ------------------------------------
     public function __construct()
     {
         $this->setTableName("Candidat");
@@ -49,7 +62,19 @@ class CandidatModel
 
     public function getAll(): array
     {
-        $query = "SELECT id_candidat, name, nb_voix AS voix, CONCAT( ROUND((nb_voix * 100 / (SELECT SUM(nb_voix) FROM $this->tableName)), 2) ,' %') AS pourcentage FROM $this->tableName;";
-        return $this->dataManipulator->executeQuery($query);
+        $this->setQuery("SELECT id_candidat, name, nb_voix AS voix, CONCAT( ROUND((nb_voix * 100 / (SELECT SUM(nb_voix) FROM $this->tableName)), 2) ,' %') AS pourcentage FROM $this->tableName;");
+        return $this->dataManipulator->executeQuery($this->query);
+    }
+
+    public function getOne(): array
+    {
+        $this->setQuery("SELECT *, ROUND(nb_voix * 100 / (SELECT SUM(nb_voix) FROM $this->tableName)) AS percentage FROM $this->tableName WHERE id_candidat = (SELECT MIN(id_candidat) FROM $this->tableName);");
+        return $this->dataManipulator->executeQuery($this->query);
+    }
+
+    public function getFirstCandidatPercentage(): int
+    {
+        $this->setQuery("SELECT ROUND(nb_voix * 100 / (SELECT SUM(nb_voix) FROM $this->tableName)) AS percentage FROM $this->tableName WHERE id_candidat = (SELECT MIN(id_candidat) FROM $this->tableName);");
+        return intval($this->dataManipulator->executeQuery($this->query)[0]["percentage"]);
     }
 }
