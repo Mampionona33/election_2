@@ -68,7 +68,7 @@ class PageController
     {
         $this->authController = $authController;
         $this->setLoginPage(new LoginPage());
-        $this->setHomePage(new HomePage());
+        $this->setHomePage(new HomePage($this->authController));
         $this->manageCandidat = new ManageCandidat($this->authController);
         $this->dashboard = new Dashboard($this->authController);
     }

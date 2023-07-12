@@ -4,14 +4,11 @@ namespace views;
 
 use controller\AuthController;
 use controller\CandidatController;
-use template\Template;
 use lib\Navbar;
 
-class HomePage extends Template
+class HomePage extends BaseView
 {
 
-    private $navBarObj;
-    private $authController;
     private $candidatController;
     private $cardResult;
 
@@ -36,29 +33,11 @@ class HomePage extends Template
         return $this->candidatController;
     }
 
-    public function setNavBarObj(Navbar $navBarObj): void
-    {
-        $this->navBarObj = $navBarObj;
-    }
-
-    public function getNavBarObj(): Navbar
-    {
-        return $this->navBarObj;
-    }
-
-    public function setauthController(AuthController $authController): void
-    {
-        $this->authController = $authController;
-    }
-
-    public function getauthController(): AuthController
-    {
-        return $this->authController;
-    }
     // -------------------------------------
 
-    public function __construct()
+    public function __construct(AuthController $authController)
     {
+        parent::__construct($authController);
         $this->setTilte('Home');
         $this->setCardResult(new CardResult());
         $this->setNavBarObj(new Navbar());
