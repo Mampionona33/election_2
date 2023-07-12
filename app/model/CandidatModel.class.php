@@ -66,15 +66,15 @@ class CandidatModel
         return $this->dataManipulator->executeQuery($this->query);
     }
 
-    public function getOne(): array
+    public function getFirstCandidat(): array
     {
         $this->setQuery("SELECT *, ROUND(nb_voix * 100 / (SELECT SUM(nb_voix) FROM $this->tableName)) AS percentage FROM $this->tableName WHERE id_candidat = (SELECT MIN(id_candidat) FROM $this->tableName);");
         return $this->dataManipulator->executeQuery($this->query);
     }
 
-    public function getFirstCandidatPercentage(): int
+    public function getCandidatWithMaxPoint(): array
     {
-        $this->setQuery("SELECT ROUND(nb_voix * 100 / (SELECT SUM(nb_voix) FROM $this->tableName)) AS percentage FROM $this->tableName WHERE id_candidat = (SELECT MIN(id_candidat) FROM $this->tableName);");
-        return intval($this->dataManipulator->executeQuery($this->query)[0]["percentage"]);
+        $this->setQuery("SELECT *, ROUND(nb_voix * 100 / (SELECT SUM(nb_voix) FROM $this->tableName)) AS percentage FROM $this->tableName WHERE nb_voix = (SELECT Max(nb_voix) FROM $this->tableName);");
+        return $this->dataManipulator->executeQuery($this->query);
     }
 }
