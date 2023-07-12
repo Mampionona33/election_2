@@ -96,13 +96,16 @@ class BaseView extends Template
 
         // Vérifier si au moins l'un des rôles requis est présent dans les rôles de l'utilisateur
         foreach ($requiredRoles as $requiredRole) {
+            // Vérifier si le rôle requis existe dans les rôles de l'utilisateur
             if (in_array($requiredRole, $userRoles)) {
                 return true;
             }
         }
 
+        // Aucun des rôles requis n'est présent dans les rôles de l'utilisateur
         return false;
     }
+
 
     public function __construct(AuthController $authController)
     {
@@ -147,6 +150,4 @@ class BaseView extends Template
 
         return $buttons;
     }
-
-    
 }

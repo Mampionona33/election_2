@@ -61,9 +61,10 @@ class AuthController
                         session_start();
                     }
                     $_SESSION["user"] = $this->userLogged;
-                    // $this->setUserLogged($_SESSION["user"]);
-
                     header("Location: /dashboard");
+                    exit();
+                } else {
+                    header("Location: /login");
                     exit();
                 }
             } else {
@@ -87,15 +88,4 @@ class AuthController
         session_destroy();
         exit();
     }
-
-    // public function getUserLoggedIdGroupe(): void
-    // {
-    //     if (
-    //         isset($_SESSION["user"])
-    //         &&  isset($_SESSION["user"][0]["id_groupe"])
-    //     ) {
-    //         var_dump($_SESSION["user"][0]["id_groupe"]);
-    //         $this->setUserIdGroupe($_SESSION["user"][0]["id_groupe"]);
-    //     }
-    // }
 }
