@@ -51,7 +51,7 @@ class Navbar
         $menuButton = $this->renderMenuButton();
         $logButton = $this->logButton();
         return <<<HTML
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
                 $menuButton
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
                     <ul class="navbar-nav">
