@@ -9,10 +9,25 @@ export class CustomTableHandler {
   protected modalButtonSubmitId: string;
   protected modalElement: HTMLElement;
   protected modal: Modal;
+  protected modalAddtitle:string;
+
+  protected modalForm: string;
 
   /**
    * Getters and setters
    */
+  public setModalAddtitle(modalAddtitle:string){
+    this.modalAddtitle = modalAddtitle;
+  }
+  public getModalAddtitle():string{
+    return this.modalAddtitle;
+  }
+  public setModalForm(modalForm: string) {
+    this.modalForm = modalForm;
+  }
+  public getModalForm(): string {
+    return this.modalForm;
+  }
   public setModalElement(modalElement: HTMLElement): void {
     this.modalElement = modalElement;
   }
@@ -73,17 +88,17 @@ export class CustomTableHandler {
 
   constructor() {
     this.modalElement = document.createElement("div");
-    this.modalElement.classList.add("div");
+    this.modalElement.classList.add("modal");
     this.handleClickAdd();
+    this.removeModal();
+    this.setModalAddtitle("Créer")
   }
 
   protected handleClickAdd(): void {
     if (this.addButton) {
       this.addButton?.addEventListener("click", (ev) => {
-        console.log(this.addButton);
-        console.log("test");
         ev.preventDefault();
-        this.createModal(this.generateModal("Créer"));
+        this.createModal(this.generateModal(this.modalAddtitle));
       });
     }
   }
@@ -94,6 +109,13 @@ export class CustomTableHandler {
     this.modal = new Modal(this.modalElement, {
       backdrop: true,
       keyboard: true,
+    });
+    // Ajouter la classe "show" pour afficher le modal
+    this.modalElement.classList.add("show");
+
+    // Supprimer la classe "show" lorsque le modal est fermé
+    this.modalElement.addEventListener("hidden.bs.modal", () => {
+      this.modalElement.classList.remove("show");
     });
     this.modal.show();
   }
@@ -110,7 +132,7 @@ export class CustomTableHandler {
     }
 
     return `
-    <div class="modal-dialog modal-dialog-centered "> <!-- Ajoutez la classe "modal-lg" pour agrandir la largeur -->
+    <div class="modal-dialog modal-dialog-centered ">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">${title}</h5>
@@ -119,7 +141,7 @@ export class CustomTableHandler {
       <form method="POST" id="form_modal">
         <div class="modal-body">
           <div class="d-flex justify-content-center align-items-center">
-            <div class="col-9">Test</div>
+            <div class="col-9">${this.modalForm}</div>
           </div>
         </div>
         <div class="modal-footer">
@@ -130,5 +152,11 @@ export class CustomTableHandler {
     </div>
   </div>
     `;
+  }
+
+  private removeModal():void{
+    document.body.addEventListener("hidden.bs.modal",(ev)=>{
+      this.modalElement.remove();
+    })
   }
 }
