@@ -92,7 +92,9 @@ export class CustomTableHandler {
     this.handleClickAdd();
     this.removeModal();
     this.setModalAddtitle("Créer");
-    this.setPath(window.location.pathname);
+    this.setPath(
+      window.location.pathname.slice(1, window.location.pathname.length)
+    );
   }
 
   protected handleClickAdd(): void {

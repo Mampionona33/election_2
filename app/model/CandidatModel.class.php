@@ -77,4 +77,27 @@ class CandidatModel
         $this->setQuery("SELECT *, ROUND(nb_voix * 100 / (SELECT SUM(nb_voix) FROM $this->tableName)) AS percentage FROM $this->tableName WHERE nb_voix = (SELECT Max(nb_voix) FROM $this->tableName);");
         return $this->dataManipulator->executeQuery($this->query);
     }
+
+    public function create($data): bool
+    {
+        $columns = [];
+        $values = [];
+
+        foreach ($data as $key => $value) {
+            $columns[] = $key;
+            $values[] = is_string($value) ? "'$value'" : $value;
+        }
+
+        $columnsString = implode(', ', $columns);
+        $valuesString = implode(', ', $values);
+
+        $query = "INSERT INTO $this->tableName ($columnsString) VALUES ($valuesString)";
+        $result = $this->dataManipulator->executeQuery($query);
+
+        if (!empty($result)) {
+            return true;
+        }
+
+        return false;
+    }
 }

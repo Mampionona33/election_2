@@ -113,7 +113,6 @@ final class CardResult extends BaseCard
         return $this->result;
     }
 
-
     public function render(): string
     {
         return parent::render();
