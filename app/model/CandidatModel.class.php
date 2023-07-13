@@ -4,54 +4,8 @@ namespace model;
 
 use SQL\DataManipulator;
 
-class CandidatModel
+class CandidatModel extends BaseModel
 {
-    private $tableName;
-    private $columns;
-    private $dataManipulator;
-    private $query;
-
-    /**
-     * getter and setter
-     */
-    public function setQuery(string $query): void
-    {
-        $this->query = $query;
-    }
-
-    public function getQuery(): string
-    {
-        return $this->query;
-    }
-    public function setTableName(string $tableName): void
-    {
-        $this->tableName = $tableName;
-    }
-    public function getTableName(): string
-    {
-        return $this->tableName;
-    }
-
-    public function setColumns(string $columns): void
-    {
-        $this->columns = $columns;
-    }
-
-    public function getColumns(): string
-    {
-        return $this->columns;
-    }
-
-    public function setDataManipulator(DataManipulator $dataManipulator): void
-    {
-        $this->dataManipulator = $dataManipulator;
-    }
-
-    public function getDataManipulator(): DataManipulator
-    {
-        return $this->dataManipulator;
-    }
-    // ------------------------------------
     public function __construct()
     {
         $this->setTableName("Candidat");
@@ -76,28 +30,5 @@ class CandidatModel
     {
         $this->setQuery("SELECT *, ROUND(nb_voix * 100 / (SELECT SUM(nb_voix) FROM $this->tableName)) AS percentage FROM $this->tableName WHERE nb_voix = (SELECT Max(nb_voix) FROM $this->tableName);");
         return $this->dataManipulator->executeQuery($this->query);
-    }
-
-    public function create($data): bool
-    {
-        $columns = [];
-        $values = [];
-
-        foreach ($data as $key => $value) {
-            $columns[] = $key;
-            $values[] = is_string($value) ? "'$value'" : $value;
-        }
-
-        $columnsString = implode(', ', $columns);
-        $valuesString = implode(', ', $values);
-
-        $query = "INSERT INTO $this->tableName ($columnsString) VALUES ($valuesString)";
-        $result = $this->dataManipulator->executeQuery($query);
-
-        if (!empty($result)) {
-            return true;
-        }
-
-        return false;
     }
 }
