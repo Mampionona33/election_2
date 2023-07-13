@@ -9,17 +9,17 @@ export class CustomTableHandler {
   protected modalButtonSubmitId: string;
   protected modalElement: HTMLElement;
   protected modal: Modal;
-  protected modalAddtitle:string;
+  protected modalAddtitle: string;
 
   protected modalForm: string;
 
   /**
    * Getters and setters
    */
-  public setModalAddtitle(modalAddtitle:string){
+  public setModalAddtitle(modalAddtitle: string) {
     this.modalAddtitle = modalAddtitle;
   }
-  public getModalAddtitle():string{
+  public getModalAddtitle(): string {
     return this.modalAddtitle;
   }
   public setModalForm(modalForm: string) {
@@ -91,7 +91,8 @@ export class CustomTableHandler {
     this.modalElement.classList.add("modal");
     this.handleClickAdd();
     this.removeModal();
-    this.setModalAddtitle("Créer")
+    this.setModalAddtitle("Créer");
+    this.setPath(window.location.pathname);
   }
 
   protected handleClickAdd(): void {
@@ -105,11 +106,13 @@ export class CustomTableHandler {
 
   private createModal(modalForm: string): void {
     this.modalElement.innerHTML = modalForm;
+
     document.body.appendChild(this.modalElement);
     this.modal = new Modal(this.modalElement, {
       backdrop: true,
       keyboard: true,
     });
+
     // Ajouter la classe "show" pour afficher le modal
     this.modalElement.classList.add("show");
 
@@ -117,7 +120,15 @@ export class CustomTableHandler {
     this.modalElement.addEventListener("hidden.bs.modal", () => {
       this.modalElement.classList.remove("show");
     });
+
     this.modal.show();
+
+    // Lancer l'ecoute du formulaire après son création
+    this.modalElement
+      .querySelector("#form_modal")
+      ?.addEventListener("submit", (ev) => {
+        this.handleSubmitModal(ev);
+      });
   }
 
   protected generateModal(title: string, data?: object): string {
@@ -154,9 +165,44 @@ export class CustomTableHandler {
     `;
   }
 
-  private removeModal():void{
-    document.body.addEventListener("hidden.bs.modal",(ev)=>{
+  private removeModal(): void {
+    document.body.addEventListener("hidden.bs.modal", (ev) => {
       this.modalElement.remove();
-    })
+    });
+  }
+
+  private async handleSubmitModal(ev: Event) {
+    ev.preventDefault();
+    const form = ev.target as HTMLFormElement;
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    if (this.modalButtonSubmitId === "submit_modal_create") {
+      const resp = await this.post(data);
+      console.log(resp);
+    } else {
+      console.log("update");
+    }
+  }
+
+  /**
+   * method for fetch and post data
+   */
+
+  async post(data: object) {
+    try {
+      const req = await fetch(`api/${this.path}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const resp = await req.json();
+      return {
+        status: resp.status,
+        data: resp,
+      };
+    } catch (error) {
+      throw error;
+    }
   }
 }

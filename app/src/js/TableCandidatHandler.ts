@@ -27,9 +27,9 @@ class TableCandidatHandler extends CustomTableHandler {
       </div>
     </div>
     <div class="form-group row">
-      <label for="nbVoix" class="col-sm-6 col-form-label">Nombre de voix</label>
+      <label for="nb_voix" class="col-sm-6 col-form-label">Nombre de voix</label>
       <div class="col-sm-6">
-        <input type="number" class="form-control form-control-sm" name="nbVoix" id="nbVoix" value="${
+        <input type="number" class="form-control form-control-sm" name="nb_voix" id="nb_voix" value="${
           data?.nb_voix ? data.nb_voix : ""
         }" required>
       </div>
