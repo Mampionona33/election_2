@@ -2,7 +2,7 @@ import { Modal } from "bootstrap";
 
 export class CustomTableHandler {
   protected addButton?: Element | null;
-  protected editButton?: HTMLButtonElement;
+  protected editButton?: Element | null;
   protected deleteButton?: HTMLButtonElement;
   protected path?: string;
   protected modalButtonSubmitLabel: string;
@@ -10,22 +10,42 @@ export class CustomTableHandler {
   protected modalElement: HTMLElement;
   protected modal: Modal;
   protected modalAddtitle: string;
-
-  protected modalForm: string;
+  protected modalEditTitle: string;
+  protected rowId?: number;
+  protected ressourceIdKey?: string;
+  protected modalForm: Function;
 
   /**
    * Getters and setters
    */
+  public setRessourceIdKey(ressourceIdKey?: string) {
+    this.ressourceIdKey = ressourceIdKey;
+  }
+  public getRessourceIdKey(): string | undefined {
+    return this.ressourceIdKey;
+  }
+  public setRowId(rowId?: number): void {
+    this.rowId = rowId;
+  }
+  public getRowId(): number | undefined {
+    return this.rowId;
+  }
+  public setModalEditTitle(modalEditTitle: string): void {
+    this.modalEditTitle = modalEditTitle;
+  }
+  public getModalEditTitle(): string {
+    return this.modalEditTitle;
+  }
   public setModalAddtitle(modalAddtitle: string) {
     this.modalAddtitle = modalAddtitle;
   }
   public getModalAddtitle(): string {
     return this.modalAddtitle;
   }
-  public setModalForm(modalForm: string) {
+  public setModalForm(modalForm: Function) {
     this.modalForm = modalForm;
   }
-  public getModalForm(): string {
+  public getModalForm(): Function {
     return this.modalForm;
   }
   public setModalElement(modalElement: HTMLElement): void {
@@ -52,7 +72,7 @@ export class CustomTableHandler {
     return this.modalButtonSubmitLabel;
   }
 
-  public setAddButton(addButton?: Element): void {
+  public setAddButton(addButton?: Element | null): void {
     this.addButton = addButton;
   }
 
@@ -60,11 +80,11 @@ export class CustomTableHandler {
     return this.addButton;
   }
 
-  public setEditButton(editButton?: HTMLButtonElement): void {
+  public setEditButton(editButton?: Element | null): void {
     this.editButton = editButton;
   }
 
-  public getEditButton(): HTMLButtonElement | undefined {
+  public getEditButton(): Element | null | undefined {
     return this.editButton;
   }
 
@@ -86,12 +106,13 @@ export class CustomTableHandler {
 
   // -------------------------------------------------
 
-  constructor() {
+  constructor(ressourceIdKey: string) {
+    this.setRessourceIdKey(ressourceIdKey);
     this.modalElement = document.createElement("div");
     this.modalElement.classList.add("modal");
-    this.handleClickAdd();
     this.removeModal();
     this.setModalAddtitle("Créer");
+    this.setModalEditTitle("Modifier");
     this.setPath(
       window.location.pathname.slice(1, window.location.pathname.length)
     );
@@ -102,6 +123,22 @@ export class CustomTableHandler {
       this.addButton?.addEventListener("click", (ev) => {
         ev.preventDefault();
         this.createModal(this.generateModal(this.modalAddtitle));
+      });
+    }
+  }
+
+  protected handleClickEdit() {
+    if (this.editButton) {
+      this.editButton?.addEventListener("click", async (ev) => {
+        ev.preventDefault();
+        this.setRowId(parseInt((ev.target as HTMLElement).dataset.id!));
+        const res = await this.get();
+        if (res.status === 200) {
+          console.log(res.data.data[0]);
+          this.createModal(
+            this.generateModal(this.modalEditTitle, res.data.data[0])
+          );
+        }
       });
     }
   }
@@ -154,12 +191,14 @@ export class CustomTableHandler {
       <form method="POST" id="form_modal">
         <div class="modal-body">
           <div class="d-flex justify-content-center align-items-center">
-            <div class="col-9">${this.modalForm}</div>
+            <div class="col-9">${this.modalForm(data ? data : null)}</div>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" id="${this.modalButtonSubmitId}" class="btn btn-primary">${this.modalButtonSubmitLabel}</button>
+          <button type="submit" id="${
+            this.modalButtonSubmitId
+          }" class="btn btn-primary">${this.modalButtonSubmitLabel}</button>
         </div>
       </form>
     </div>
@@ -207,6 +246,24 @@ export class CustomTableHandler {
       return {
         status: req.ok ? req.status : 0,
         data: resp,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async get() {
+    try {
+      const res = await fetch(
+        `api/${this.path}?${this.ressourceIdKey}=${this.rowId}`
+      );
+      if (!res.ok) {
+        throw new Error("Unable to fetch data from API.");
+      }
+      const data = await res.json();
+      return {
+        status: res.status,
+        data,
       };
     } catch (error) {
       throw error;

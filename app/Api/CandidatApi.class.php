@@ -60,6 +60,20 @@ class CandidatApi extends Api
         }
     }
 
+    public function get(): void
+    {
+        if ($this->verifySession()) {
+            if (isset($_GET) && isset($_GET["id_candidat"])) {
+                $candidat =   $this->candidatModel->getById($_GET);
+                if (!empty($candidat)) {
+                    $this->sendResponse(200, ["data" => $candidat]);
+                } else {
+                    $this->sendResponse(500, ["error" => "Error when trying to get candidat"]);
+                }
+            }
+        }
+    }
+
     private function verifySession(): bool
     {
         if (session_status() === PHP_SESSION_NONE) {

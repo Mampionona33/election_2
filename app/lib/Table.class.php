@@ -134,11 +134,11 @@ class Table
                     $actionsHTML = '';
 
                     if ($this->editButtonState) {
-                        $actionsHTML .= '<button type="button" class="btn btn-primary" data-id="edit_' . $rowId . '">Modifier</button>';
+                        $actionsHTML .= '<button type="button" name="edit" class="btn btn-primary" data-id="' . $rowId . '">Modifier</button>';
                     }
 
                     if ($this->deleteButtonState) {
-                        $actionsHTML .= '<button type="button" class="btn btn-danger" data-id="delete_' . $rowId . '">Supprimer</button>';
+                        $actionsHTML .= '<button type="button" name="delete" class="btn btn-danger" data-id="' . $rowId . '">Supprimer</button>';
                     }
 
                     $bodyHTML .= '<td class="d-flex flex-wrap gap-1 justify-content-center">' . $actionsHTML . '</td>';

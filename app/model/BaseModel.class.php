@@ -94,9 +94,20 @@ class BaseModel
     }
 
     // Retrieve a specific record by ID
-    public function getById(int $id): array
+    public function getById(array $data): array
     {
-        $query = "SELECT * FROM $this->tableName WHERE id = $id";
+        $columns = [];
+        $values = [];
+
+        foreach ($data as $key => $value) {
+            $columns[] = $key;
+            $values[] = is_string($value) ? "'$value'" : $value;
+        }
+
+        $columnsString = implode(', ', $columns);
+        $valuesString = implode(', ', $values);
+
+        $query = "SELECT * FROM $this->tableName WHERE  ($columnsString) = $valuesString";
         return $this->dataManipulator->executeQuery($query);
     }
 

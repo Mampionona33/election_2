@@ -2,18 +2,24 @@ import { CustomTableHandler } from "./CustomTableHandler";
 
 class TableCandidatHandler extends CustomTableHandler {
   constructor() {
-    super();
-    const addButton = document.querySelector("#table-btn-add");
-    if (addButton instanceof HTMLButtonElement) {
-      this.setAddButton(addButton);
+    super("id_candidat");
+    if (document.querySelector("#table-btn-add")) {
+      this.setAddButton(document.querySelector("#table-btn-add"));
       this.handleClickAdd();
-    } 
-    const modalForm = this.generateModalForm();
-    this.setModalForm(modalForm);
+    }
+    if (document.querySelectorAll('button[name="edit"]')) {
+      document.querySelectorAll('button[name="edit"]').forEach((editButton) => {
+        this.setEditButton(editButton);
+        this.handleClickEdit();
+      });
+    }
+    this.setModalForm(this.generateModalForm);
     this.setModalAddtitle("Créer candidat");
   }
 
-  private generateModalForm(data?: { name: string; nb_voix: number } | null): string {
+  private generateModalForm(
+    data?: { name: string; nb_voix: number } | null
+  ): string {
     return `
     <div class="form-group row">
       <label for="name" class="col-sm-6 col-form-label">Nom</label>
