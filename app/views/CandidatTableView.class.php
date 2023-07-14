@@ -31,14 +31,6 @@ class CandidatTableView extends Table
         $this->setDeleteButtonVisible(true);
     }
 
-    private function calucPourcentage(): string
-    {
-        return <<<HTML
-        <div>
-        </div>
-        HTML;
-    }
-
     public function render(): string
     {
         return parent::render();
