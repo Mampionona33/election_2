@@ -88,7 +88,7 @@ final class CardResult extends BaseCard
         $this->setIconBackground("#bbb");
     }
 
-    private function calculResult(): string
+    private function calculResult(): mixed
     {
         if (!empty($this->firstCandidat) && !empty($this->candidatWithMaxPoint)) {
 

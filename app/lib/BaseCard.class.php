@@ -23,11 +23,11 @@ class BaseCard
     {
         return $this->title;
     }
-    public function setmessage(string $message): void
+    public function setmessage(mixed $message): void
     {
         $this->message = $message;
     }
-    public function  getmessage(): string
+    public function  getmessage(): mixed
     {
         return $this->message;
     }

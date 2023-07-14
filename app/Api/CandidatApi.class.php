@@ -47,10 +47,8 @@ class CandidatApi extends Api
             if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 // Récupérer les données du formulaire ici
                 $requestData = json_decode(file_get_contents('php://input'), true);
-                $name = $requestData["name"];
-                $nb_voix = $requestData["nb_voix"];
 
-                if ($name !== null && $nb_voix !== null) {
+                if (!empty($requestData)) {
                     $this->candidatModel->create($requestData);
                     $this->sendResponse(200, ["message" => "Candidat Create successfully"]);
                 } else {
