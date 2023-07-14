@@ -74,7 +74,13 @@ class Template
                 $navbar
                 $sidebar
                 <div class="container">
-                    $body
+                    <div class="row">
+                        <div class="col">
+                            <div class="overflow-auto">
+                                $body
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <script src="../dist/app-bundle.js"></script>
             </body>

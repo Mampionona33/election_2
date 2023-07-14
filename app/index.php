@@ -96,6 +96,7 @@ final class App
         $this->router->get("/dashboard", [$this->pageController, 'renderDashboard']);
         $this->router->get("/logout", [$this->authController, "handleLogout"]);
         $this->router->get("/candidat", [$this->pageController, "handleCandidat"]);
+        $this->router->get("/authorization", [$this->pageController, "renderManageAuthorization"]);
         $this->router->post("/api/candidat", [$this->candidatApi, "create"]);
         $this->router->get("/api/candidat", [$this->candidatApi, "get"]);
         $this->router->put("/api/candidat", [$this->candidatApi, "update"]);

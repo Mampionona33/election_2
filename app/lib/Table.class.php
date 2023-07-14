@@ -187,24 +187,34 @@ class Table
         $tableBody = $this->generateBody();
 
         return <<<HTML
-          <div class="d-flex flex-column align-items-center justify-content-center vh-100">
+            <div class="d-flex flex-column align-items-center justify-content-center vh-100">
             <div class="container">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     $searchBar
                     $addBtn
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped shadow-sm">
-                        <thead>
-                            <tr class="text-uppercase table-dark">$headers</tr>
-                        </thead>
-                        <tbody>
-                            $tableBody
-                        </tbody>
-                    </table>
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="overflow-auto" style="max-height: 400px;">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped shadow-sm">
+                                        <thead class="text-uppercase table-dark sticky-top" style="position: sticky!important; top: 0;">
+                                            <tr>$headers</tr>
+                                        </thead>
+                                        <tbody>
+                                            $tableBody
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+
         HTML;
     }
 }

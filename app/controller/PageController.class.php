@@ -5,6 +5,7 @@ namespace controller;
 use views\Dashboard;
 use views\HomePage;
 use views\LoginPage;
+use views\ManageAuthorization;
 use views\ManageCandidat;
 
 class PageController
@@ -14,7 +15,19 @@ class PageController
     private $dashboard;
     private $authController;
     private $manageCandidat;
+    private $manageAuthorization;
 
+    /**
+     * getter and setter
+     */
+    public function setManageAuthorization(ManageAuthorization $manageAuthorization): void
+    {
+        $this->manageAuthorization = $manageAuthorization;
+    }
+    public function getManageAuthorization(): ManageAuthorization
+    {
+        return $this->manageAuthorization;
+    }
     public function setManageCandidat(ManageCandidat $manageCandidat): void
     {
         $this->manageCandidat = $manageCandidat;
@@ -71,6 +84,7 @@ class PageController
         $this->setHomePage(new HomePage($this->authController));
         $this->manageCandidat = new ManageCandidat($this->authController);
         $this->dashboard = new Dashboard($this->authController);
+        $this->setManageAuthorization(new ManageAuthorization($this->authController));
     }
 
     public function renderHomePage(): void
@@ -94,6 +108,16 @@ class PageController
     {
         if ($this->authController->isUserLogged()) {
             echo $this->manageCandidat->render();
+            exit();
+        } else {
+            $this->redirectToVisitorHome();
+        }
+    }
+
+    public function renderManageAuthorization(): void
+    {
+        if ($this->authController->isUserLogged()) {
+            echo $this->manageAuthorization->render();
             exit();
         } else {
             $this->redirectToVisitorHome();

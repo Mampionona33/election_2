@@ -131,6 +131,7 @@ class BaseView extends Template
         $requiredRolesUser = ['create_user', 'update_user', 'delete_user'];
         $requiredRolesRole = ['create_role', 'update_role', 'delete_role'];
         $requiredRolesGroupe = ['create_groupe', 'update_groupe', 'delete_groupe'];
+        $requiredAuthorization = ['create_auht', 'update_auht', 'delete_auht'];
 
         if ($this->hasRole($requiredRolesCandidat)) {
             $buttons[] = ['path' => 'candidat', 'label' => 'Gérer candidat'];
@@ -144,9 +145,10 @@ class BaseView extends Template
         if ($this->hasRole($requiredRolesGroupe)) {
             $buttons[] = ['path' => "groupe", "label" => "Gérer groupe"];
         }
+        if ($this->hasRole($requiredAuthorization)) {
+            $buttons[] = ['path' => "authorization", "label" => "Gérer Authorisation"];
+        }
 
         return $buttons;
     }
-
-    
 }

@@ -143,9 +143,6 @@ class BaseModel
     }
 
 
-
-
-
     // Delete a specific record by ID
     public function delete(int $id): bool
     {

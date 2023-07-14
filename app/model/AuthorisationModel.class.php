@@ -21,4 +21,17 @@ class AuthorisationModel extends BaseModel
         $result = $this->dataManipulator->executeQuery($query);
         return $result;
     }
+
+    public function getGroupeRolesReadable(): mixed
+    {
+        $this->setQuery("SELECT a.id_authorisation, r.label AS role_label, g.name AS groupe_label
+        FROM Authorisation AS a
+        JOIN Role AS r ON a.id_role = r.id_role
+        JOIN Groupe AS g ON a.id_groupe = g.id_groupe
+        ORDER BY g.name
+        LIMIT 0, 25;
+        ");
+        $result = $this->dataManipulator->executeQuery($this->query);
+        return $result;
+    }
 }
