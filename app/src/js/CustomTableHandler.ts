@@ -181,7 +181,10 @@ export class CustomTableHandler {
 
     if (this.modalButtonSubmitId === "submit_modal_create") {
       const resp = await this.post(data);
-      console.log(resp);
+      if (resp.status === 200) {
+        console.log(resp);
+        window.location.reload();
+      }
     } else {
       console.log("update");
     }
@@ -199,8 +202,10 @@ export class CustomTableHandler {
         body: JSON.stringify(data),
       });
       const resp = await req.json();
+      console.log(resp);
+
       return {
-        status: resp.status,
+        status: req.ok ? req.status : 0,
         data: resp,
       };
     } catch (error) {

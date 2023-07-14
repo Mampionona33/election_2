@@ -7,10 +7,7 @@ class TableCandidatHandler extends CustomTableHandler {
     if (addButton instanceof HTMLButtonElement) {
       this.setAddButton(addButton);
       this.handleClickAdd();
-    } else {
-      console.log("addButton dose doesn't exist!");
-      throw new Error("addButton dose doesn't exist!");
-    }
+    } 
     const modalForm = this.generateModalForm();
     this.setModalForm(modalForm);
     this.setModalAddtitle("Créer candidat");
