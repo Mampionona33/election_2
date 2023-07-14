@@ -9,10 +9,19 @@ class CandidatApi extends Api
 {
     private $candidatModel;
     private $authorisationController;
+    private $requestData;
 
     /**
      * getter and setter
      */
+    public function setRequestData($requestData): void
+    {
+        $this->requestData = $requestData;
+    }
+    public function getRequestData()
+    {
+        return $this->requestData;
+    }
     public function setAuthorisationController(AuthorisationController $authorisationController): void
     {
         $this->authorisationController = $authorisationController;
@@ -38,6 +47,8 @@ class CandidatApi extends Api
     public function __construct()
     {
         $this->setCandidatModel(new CandidatModel());
+        // Récupérer les données du formulaire ici
+        $this->setRequestData(json_decode(file_get_contents('php://input'), true));
     }
 
     public function create(): void
@@ -45,11 +56,10 @@ class CandidatApi extends Api
 
         if ($this->verifySession()) {
             if ($_SERVER["REQUEST_METHOD"] === "POST") {
-                // Récupérer les données du formulaire ici
-                $requestData = json_decode(file_get_contents('php://input'), true);
 
-                if (!empty($requestData)) {
-                    $this->candidatModel->create($requestData);
+
+                if (!empty($this->requestData)) {
+                    $this->candidatModel->create($this->requestData);
                     $this->sendResponse(200, ["message" => "Candidat Create successfully"]);
                 } else {
                     $this->sendResponse(500, ["error" => "Error when trying to create candidat"]);
@@ -69,6 +79,22 @@ class CandidatApi extends Api
                     $this->sendResponse(200, ["data" => $candidat]);
                 } else {
                     $this->sendResponse(500, ["error" => "Error when trying to get candidat"]);
+                }
+            }
+        }
+    }
+
+    public function update(): void
+    {
+        if ($this->verifySession()) {
+            if ($_SERVER["REQUEST_METHOD"] === "PUT") {
+                if (!empty($this->requestData)) {
+                    $resp = $this->candidatModel->update($this->requestData);
+                    if ($resp) {
+                        $this->sendResponse(200, ["message" => "Candidat update successfully"]);
+                    } else {
+                        $this->sendResponse(500, ["error" => "Error when trying to update candidat"]);
+                    }
                 }
             }
         }

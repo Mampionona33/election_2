@@ -225,7 +225,14 @@ export class CustomTableHandler {
         window.location.reload();
       }
     } else {
-      console.log("update");
+      if (this.ressourceIdKey && this.rowId) {
+        data[this.ressourceIdKey!] = String(this.rowId!);
+      }
+      const resp = await this.put(data);
+      console.log(resp.status);
+      if (resp.status === 200) {
+        window.location.reload();
+      }
     }
   }
 
@@ -233,7 +240,7 @@ export class CustomTableHandler {
    * method for fetch and post data
    */
 
-  async post(data: object) {
+  async post(data: object): Promise<{ status: number; data: any }> {
     try {
       const req = await fetch(`api/${this.path}`, {
         method: "POST",
@@ -252,7 +259,7 @@ export class CustomTableHandler {
     }
   }
 
-  async get() {
+  async get(): Promise<{ status: number; data: any }> {
     try {
       const res = await fetch(
         `api/${this.path}?${this.ressourceIdKey}=${this.rowId}`
@@ -264,6 +271,23 @@ export class CustomTableHandler {
       return {
         status: res.status,
         data,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async put(data: object): Promise<{ status: number; data: any }> {
+    try {
+      const response = await fetch(`api/${this.path}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const resp = await response.json();
+      return {
+        status: response.status,
+        data: resp,
       };
     } catch (error) {
       throw error;

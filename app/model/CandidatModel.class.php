@@ -12,6 +12,7 @@ class CandidatModel extends BaseModel
         $this->setColumns("id_candidat INT PRIMARY KEY AUTO_INCREMENT,name VARCHAR(255), nb_voix BIGINT");
         $this->setDataManipulator(new DataManipulator());
         $this->dataManipulator->createTable($this->tableName, $this->columns);
+        $this->setIdKey("id_candidat");
     }
 
     public function getAll(): array

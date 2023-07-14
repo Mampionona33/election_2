@@ -15,6 +15,7 @@ class TableCandidatHandler extends CustomTableHandler {
     }
     this.setModalForm(this.generateModalForm);
     this.setModalAddtitle("Créer candidat");
+    this.setModalEditTitle("Modifier candidat");
   }
 
   private generateModalForm(

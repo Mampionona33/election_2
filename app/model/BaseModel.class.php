@@ -10,10 +10,20 @@ class BaseModel
     protected $columns;
     protected $dataManipulator;
     protected $query;
+    protected $id_key;
 
     /**
      * getter and setter
      */
+    public function setIdKey(string $id_key): void
+    {
+        $this->id_key = $id_key;
+    }
+    public function getIdKey(): string
+    {
+        return $this->id_key;
+    }
+
     public function setQuery(string $query): void
     {
         $this->query = $query;
@@ -112,21 +122,29 @@ class BaseModel
     }
 
     // Update a specific record by ID
-    public function update(int $id, array $data): bool
+    public function update(array $data): bool
     {
         $updates = [];
 
         foreach ($data as $key => $value) {
-            $updates[] = is_string($value) ? "$key = '$value'" : "$key = $value";
+            if ($key !== $this->id_key) {
+                $value = is_string($value) ? "'$value'" : $value;
+                $updates[] = "$key = $value";
+            }
         }
 
         $updatesString = implode(', ', $updates);
+        $id = $data[$this->id_key];
 
-        $query = "UPDATE $this->tableName SET $updatesString WHERE id = $id";
+        $query = "UPDATE $this->tableName SET $updatesString WHERE $this->id_key = $id";
         $result = $this->dataManipulator->executeQuery($query);
 
-        return !empty($result);
+        return true;
     }
+
+
+
+
 
     // Delete a specific record by ID
     public function delete(int $id): bool

@@ -98,6 +98,7 @@ final class App
         $this->router->get("/candidat", [$this->pageController, "handleCandidat"]);
         $this->router->post("/api/candidat", [$this->candidatApi, "create"]);
         $this->router->get("/api/candidat", [$this->candidatApi, "get"]);
+        $this->router->put("/api/candidat", [$this->candidatApi, "update"]);
 
         $this->router->handleRequest();
     }
