@@ -4,54 +4,8 @@ namespace model;
 
 use SQL\DataManipulator;
 
-class CandidatModel
+class CandidatModel extends BaseModel
 {
-    private $tableName;
-    private $columns;
-    private $dataManipulator;
-    private $query;
-
-    /**
-     * getter and setter
-     */
-    public function setQuery(string $query): void
-    {
-        $this->query = $query;
-    }
-
-    public function getQuery(): string
-    {
-        return $this->query;
-    }
-    public function setTableName(string $tableName): void
-    {
-        $this->tableName = $tableName;
-    }
-    public function getTableName(): string
-    {
-        return $this->tableName;
-    }
-
-    public function setColumns(string $columns): void
-    {
-        $this->columns = $columns;
-    }
-
-    public function getColumns(): string
-    {
-        return $this->columns;
-    }
-
-    public function setDataManipulator(DataManipulator $dataManipulator): void
-    {
-        $this->dataManipulator = $dataManipulator;
-    }
-
-    public function getDataManipulator(): DataManipulator
-    {
-        return $this->dataManipulator;
-    }
-    // ------------------------------------
     public function __construct()
     {
         $this->setTableName("Candidat");

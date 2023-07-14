@@ -1,6 +1,7 @@
 <?php
 // Gestion des erreurs probables
 
+use Api\CandidatApi;
 use controller\AuthController;
 use controller\PageController;
 use lib\Autoload;
@@ -18,7 +19,19 @@ final class App
     private $autoload;
     private $pageController;
     private $authController;
+    private $candidatApi;
 
+    /**
+     * getter and setter
+     */
+    public function setCandidatApi(CandidatApi $candidatApi): void
+    {
+        $this->candidatApi = $candidatApi;
+    }
+    public function getCandidatApi(): CandidatApi
+    {
+        return $this->candidatApi;
+    }
     public function setAuhController(AuthController $authController): void
     {
         $this->authController = $authController;
@@ -58,7 +71,7 @@ final class App
     {
         return $this->router;
     }
-
+    // -----------------------------------
     public function __construct()
     {
         $this->setAutoLoad(new Autoload());
@@ -66,6 +79,7 @@ final class App
         $this->authController = new AuthController();
         $this->setRouter(new Router);
         $this->pageController = new PageController($this->authController);
+        $this->setCandidatApi(new CandidatApi());
     }
 
     public function __invoke()
@@ -82,6 +96,7 @@ final class App
         $this->router->get("/dashboard", [$this->pageController, 'renderDashboard']);
         $this->router->get("/logout", [$this->authController, "handleLogout"]);
         $this->router->get("/candidat", [$this->pageController, "handleCandidat"]);
+        $this->router->post("/api/candidat", [$this->candidatApi, "create"]);
 
         $this->router->handleRequest();
     }

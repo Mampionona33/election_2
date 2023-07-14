@@ -39,4 +39,10 @@ class AuthorisationController
     {
         return $this->authorisationModel->getGroupeRoles($id_groupe);
     }
+
+    public function isUserAuthorizedTo(int $id_groupe, string $role): bool
+    {
+        $userRoles = $this->getGroupeRoles($id_groupe);
+        return in_array($role, $userRoles);
+    }
 }
