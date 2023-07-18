@@ -1,3 +1,4 @@
-export interface IModal{
-    show();
+export interface IModal {
+  show(): void;
+  generateModalForm(): string;
 }

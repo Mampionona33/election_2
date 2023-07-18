@@ -1,57 +1,84 @@
 import { Modal } from "bootstrap";
 import { IModal } from "./IModal";
+import { CandidatBaseModel } from "./CandidatBaseModel";
 
-export class CandidatModalCreate implements IModal {
-  private modalElement: Element | null;
+export class CandidatModalCreate extends CandidatBaseModel implements IModal {
+  private path: string;
 
   /**
    * Getter and setter
+   * @param path
    */
-  public getModalElement(): Element | null {
-    return this.modalElement;
+  public setPath(path: string): void {
+    this.path = path;
   }
-  public setModalElement(modalElement: Element | null) {
-    this.modalElement = modalElement;
+  public getPath(): string {
+    return this.path;
   }
-
-  // --------------------------------------
-  show() {
-    this.modalElement = this.modalElement ?? document.createElement("div");
-    this.modalElement.classList.add("modal", "fade");
-    this.modalElement.setAttribute("id", "createModal");
-    this.modalElement.innerHTML = this.generateModalContent();
-    document.body.appendChild(this.modalElement);
-
-    // Initialiser le modal Bootstrap
-    const modal = new Modal(this.modalElement);
-
-    // Afficher le modal
-    modal.show();
-
-    // Gérer les événements et les interactions du modal ici...
+  // ----------------------------
+  constructor() {
+    super();
+    this.setModalTitle("Créer candidat");
+    this.setModalBody(this.generateModalBody());
+    this.setSubmitId("submit_modal_create");
+    this.setSubmitLabel("Créer");
+    this.setHandleSubmit(this.handleCreate);
+    this.setPath(
+      window.location.pathname.slice(1, window.location.pathname.length)
+    );
   }
 
-  private generateModalContent() {
+  private generateModalBody(): string {
     return `
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Titre</h5>
-            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <form method="POST" id="form_modal">
-            <div class="modal-body">
-              <div class="d-flex justify-content-center align-items-center">
-                <div class="col-9">Body</div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="submit" id="create_candidat" class="btn btn-primary">Save</button>
-            </div>
-          </form>
-        </div>
+    <div class="form-group row">
+      <label for="name" class="col-sm-6 col-form-label">Nom</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control form-control-sm" name="name" id="name" value="" required>
       </div>
+    </div>
+    <div class="form-group row">
+      <label for="nb_voix" class="col-sm-6 col-form-label">Nombre de voix</label>
+      <div class="col-sm-6">
+        <input type="number" class="form-control form-control-sm" name="nb_voix" id="nb_voix" value="" required>
+      </div>
+    </div>
     `;
+  }
+
+  private async handleCreate(ev: Event) {
+    ev.preventDefault();
+    ev.preventDefault();
+    const form = ev.target as HTMLFormElement;
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    console.log(data);
+    const resp = await this.post(data);
+    if (resp.status === 200) {
+      console.log(resp);
+      window.location.reload();
+    }
+  }
+
+  /**
+   * method for fetch and post data
+   */
+
+  async post(data: object): Promise<{ status: number; data: any }> {
+    try {
+      const req = await fetch(`api/${this.path}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const resp = await req.json();
+      console.log(resp);
+
+      return {
+        status: req.ok ? req.status : 0,
+        data: resp,
+      };
+    } catch (error) {
+      throw error;
+    }
   }
 }
