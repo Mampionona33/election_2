@@ -1,8 +1,8 @@
 import { Modal } from "bootstrap";
 import { IModal } from "./IModal";
-import { CandidatBaseModel } from "./CandidatBaseModel";
+import { ModalBase } from "./ModalBase";
 
-export class CandidatModalCreate extends CandidatBaseModel implements IModal {
+export class CandidatModalCreate extends ModalBase implements IModal {
   private path: string;
 
   /**

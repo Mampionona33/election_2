@@ -1,7 +1,7 @@
 import { Modal } from "bootstrap";
 import { IModal } from "./IModal";
 
-export abstract class CandidatBaseModel implements IModal {
+export abstract class ModalBase implements IModal {
   protected modalElement: Element | null;
   protected title: string | null;
   protected body: string | null;
