@@ -1,21 +1,7 @@
-import { Modal } from "bootstrap";
 import { IModal } from "./IModal";
 import { ModalBase } from "./ModalBase";
 
 export class CandidatModalCreate extends ModalBase implements IModal {
-  private path: string;
-
-  /**
-   * Getter and setter
-   * @param path
-   */
-  public setPath(path: string): void {
-    this.path = path;
-  }
-  public getPath(): string {
-    return this.path;
-  }
-  // ----------------------------
   constructor() {
     super();
     this.setModalTitle("Créer candidat");

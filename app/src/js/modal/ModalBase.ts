@@ -9,9 +9,17 @@ export abstract class ModalBase implements IModal {
   protected submitLabel: string;
   protected modal: Modal;
   protected handleSubmit: Function;
+  protected path: string;
+
   /**
    * Getter and setter
    */
+  public setPath(path: string): void {
+    this.path = path;
+  }
+  public getPath(): string {
+    return this.path;
+  }
   public setHandleSubmit(handleSubmit: Function): void {
     this.handleSubmit = handleSubmit;
   }
