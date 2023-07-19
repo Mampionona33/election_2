@@ -33,7 +33,6 @@ export class CandidatModalCreate extends ModalBase implements IModal {
 
   private async handleCreate(ev: Event) {
     ev.preventDefault();
-    ev.preventDefault();
     const form = ev.target as HTMLFormElement;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());

@@ -31,11 +31,12 @@ export class CandidatModalUpdate extends ModalBase implements IModal {
     this.setPath(
       window.location.pathname.slice(1, window.location.pathname.length)
     );
+    this.setHandleSubmit(this.handleUpdate);
   }
 
   private generateModalBody(): string {
     console.log(this.candidatData);
-    
+
     return `
         <div class="form-group row">
         <label for="name" class="col-sm-6 col-form-label">Nom</label>
@@ -51,5 +52,47 @@ export class CandidatModalUpdate extends ModalBase implements IModal {
         </div>
         `;
   }
- 
+
+  private async handleUpdate(ev: Event) {
+    ev.preventDefault();
+    const form = ev.target as HTMLFormElement;
+    const formData = new FormData(form);
+    const data: any = {}; // Use 'any' type to allow dynamic property assignment
+
+    for (const [key, value] of formData.entries()) {
+      if (typeof value === "string") {
+        data[key] = value;
+      }
+    }
+    // Add the id_candidat property to the data object
+    if (this.candidatData && "id_candidat" in this.candidatData) {
+      data["id_candidat"] = this.candidatData["id_candidat"];
+    }
+    const resp = await this.put(data);
+
+    if (resp.status === 200) {
+      window.location.reload();
+    }
+  }
+
+  /**
+   * method for fetch and post data
+   */
+
+  async put(data: object): Promise<{ status: number; data: any }> {
+    try {
+      const response = await fetch(`api/${this.path}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const resp = await response.json();
+      return {
+        status: response.status,
+        data: resp,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
 }
