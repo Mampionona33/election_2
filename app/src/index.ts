@@ -10,6 +10,9 @@ class App {
   private modalType: ModalType;
   private candidatModalFactory: CandidatModalFactory;
   private candidatModal: IModal;
+  private path: string;
+  private ressourceIdKey: string;
+  protected rowId: number;
 
   constructor() {
     this.addButton = document.getElementById("table-btn-add");
@@ -20,6 +23,24 @@ class App {
   /**
    * Getter and Setter
    */
+  public setRowId(rowId: number) {
+    this.rowId = rowId;
+  }
+  public getRowId(): number {
+    return this.rowId;
+  }
+  public setPath(path: string): void {
+    this.path = path;
+  }
+  public getPath(): string {
+    return this.path;
+  }
+  public setRessourceIdKey(ressourceIdKey: string) {
+    this.ressourceIdKey = ressourceIdKey;
+  }
+  public getRessourceIdKey(): string {
+    return this.ressourceIdKey;
+  }
   public setCandidatModal(candidatModal: IModal) {
     this.candidatModal = candidatModal;
   }
@@ -55,6 +76,11 @@ class App {
   // ------------------------------------------
   handleClickButton(): void {
     if (window.location.pathname.includes("candidat")) {
+      this.setPath(
+        window.location.pathname.slice(1, window.location.pathname.length)
+      );
+      this.setRessourceIdKey("id_candidat");
+
       this.setCandidatModalFactory(new CandidatModalFactory());
       if (this.addButton) {
         this.addButton.addEventListener("click", () => {
@@ -67,16 +93,24 @@ class App {
       }
       if (this.editButtons) {
         this.editButtons.forEach((editButton) => {
-          editButton.addEventListener("click", (ev) => {
+          editButton.addEventListener("click", async (ev) => {
             ev.preventDefault();
-            console.log(ev.target);
             const targetElement = ev.target as HTMLElement;
 
             this.setModalType(ModalType.Update);
 
-            this.candidatModalFactory.setRowId(
-              parseInt(targetElement.dataset.id!, 10)
-            );
+            try {
+              this.setRowId(parseInt(targetElement.dataset.id!, 10));
+              
+              await this.get().then((res) => {
+                if (res.status === 200) {
+                  this.candidatModalFactory.setCandidatData(res.data.data[0]);
+                }
+              });
+            } catch (error) {
+              throw new Error("can not get candidat data");
+            }
+
             this.setCandidatModal(
               this.candidatModalFactory.createModal(this.modalType)
             );
@@ -85,6 +119,23 @@ class App {
           });
         });
       }
+    }
+  }
+  async get(): Promise<{ status: number; data: any }> {
+    try {
+      const res = await fetch(
+        `api/${this.path}?${this.ressourceIdKey}=${this.rowId}`
+      );
+      if (!res.ok) {
+        throw new Error("Unable to fetch data from API.");
+      }
+      const data = await res.json();
+      return {
+        status: res.status,
+        data,
+      };
+    } catch (error) {
+      throw error;
     }
   }
 }

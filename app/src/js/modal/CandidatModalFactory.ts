@@ -7,9 +7,16 @@ import { CandidatModalUpdate } from "./CandidatModalUpdate";
 export class CandidatModalFactory extends ModalFactory {
   protected rowId: number;
   private candidatModalUpdate: CandidatModalUpdate;
+  protected candidatData;
   /**
    * Getter and setter
    */
+  public setCandidatData(candidatData: object) {
+    this.candidatData = candidatData;
+  }
+  public getCandidatData(): object {
+    return this.candidatData;
+  }
   public setRowId(rowId: number) {
     this.rowId = rowId;
   }
@@ -32,7 +39,9 @@ export class CandidatModalFactory extends ModalFactory {
         return new CandidatModalCreate();
         break;
       case ModalType.Update:
-        this.setCandidatModalUpdate(new CandidatModalUpdate(this.rowId));
+        console.log(this.candidatData);
+        
+        this.setCandidatModalUpdate(new CandidatModalUpdate(this.candidatData));
         return this.candidatModalUpdate;
         break;
 

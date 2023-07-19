@@ -40,7 +40,6 @@ export class CandidatModalCreate extends ModalBase implements IModal {
     console.log(data);
     const resp = await this.post(data);
     if (resp.status === 200) {
-      console.log(resp);
       window.location.reload();
     }
   }
@@ -48,7 +47,6 @@ export class CandidatModalCreate extends ModalBase implements IModal {
   /**
    * method for fetch and post data
    */
-
   async post(data: object): Promise<{ status: number; data: any }> {
     try {
       const req = await fetch(`api/${this.path}`, {

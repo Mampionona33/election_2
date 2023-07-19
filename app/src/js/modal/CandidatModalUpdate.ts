@@ -22,9 +22,9 @@ export class CandidatModalUpdate extends ModalBase implements IModal {
     return this.candidatData;
   }
   // -------------------------------
-  constructor(rowId) {
+  constructor(candidatData) {
     super();
-    this.setRowId(rowId);
+    this.setCandidatData(candidatData);
     this.setModalTitle("Modifier candidat");
     this.setModalBody(this.generateModalBody());
     this.setSubmitLabel("Modifier");
@@ -34,38 +34,22 @@ export class CandidatModalUpdate extends ModalBase implements IModal {
   }
 
   private generateModalBody(): string {
-    console.log(this.rowId);
+    console.log(this.candidatData);
+    
     return `
         <div class="form-group row">
         <label for="name" class="col-sm-6 col-form-label">Nom</label>
         <div class="col-sm-6">
-            <input type="text" class="form-control form-control-sm" name="name" id="name" value="" required>
+            <input type="text" class="form-control form-control-sm" name="name" id="name" value="${this.candidatData["name"]}" required>
         </div>
         </div>
         <div class="form-group row">
         <label for="nb_voix" class="col-sm-6 col-form-label">Nombre de voix</label>
         <div class="col-sm-6">
-            <input type="number" class="form-control form-control-sm" name="nb_voix" id="nb_voix" value="" required>
+            <input type="number" class="form-control form-control-sm" name="nb_voix" id="nb_voix" value="${this.candidatData["nb_voix"]}" required>
         </div>
         </div>
         `;
   }
-
-  //   async get(): Promise<{ status: number; data: any }> {
-  //     try {
-  //       const res = await fetch(
-  //         `api/${this.path}?${this.ressourceIdKey}=${this.rowId}`
-  //       );
-  //       if (!res.ok) {
-  //         throw new Error("Unable to fetch data from API.");
-  //       }
-  //       const data = await res.json();
-  //       return {
-  //         status: res.status,
-  //         data,
-  //       };
-  //     } catch (error) {
-  //       throw error;
-  //     }
-  //   }
+ 
 }
