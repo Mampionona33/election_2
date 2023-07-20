@@ -3,6 +3,7 @@ import { ModalFactory } from "./ModalFactory";
 import { CandidatModalCreate } from "./CandidatModalCreate";
 import { ModalType } from "./ModalType";
 import { CandidatModalUpdate } from "./CandidatModalUpdate";
+import { CandidatModalDelete } from "./CandidatModalDelete";
 
 export class CandidatModalFactory extends ModalFactory {
   protected rowId: number;
@@ -39,10 +40,11 @@ export class CandidatModalFactory extends ModalFactory {
         return new CandidatModalCreate();
         break;
       case ModalType.Update:
-        console.log(this.candidatData);
-        
         this.setCandidatModalUpdate(new CandidatModalUpdate(this.candidatData));
         return this.candidatModalUpdate;
+        break;
+      case ModalType.Delete:
+        return new CandidatModalDelete(this.candidatData);
         break;
 
       default:

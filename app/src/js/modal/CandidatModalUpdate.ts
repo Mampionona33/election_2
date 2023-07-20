@@ -76,7 +76,7 @@ export class CandidatModalUpdate extends ModalBase implements IModal {
   }
 
   /**
-   * method for fetch and post data
+   * method for fetch and put data
    */
 
   async put(data: object): Promise<{ status: number; data: any }> {

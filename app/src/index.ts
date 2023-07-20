@@ -7,6 +7,7 @@ import { IModal } from "./js/modal/IModal";
 class App {
   private addButton: Element | null;
   private editButtons: NodeListOf<Element> | null;
+  private deleteButtons: NodeListOf<Element> | null;
   private modalType: ModalType;
   private candidatModalFactory: CandidatModalFactory;
   private candidatModal: IModal;
@@ -17,12 +18,14 @@ class App {
   constructor() {
     this.addButton = document.getElementById("table-btn-add");
     this.setEditButtons(document.querySelectorAll('button[name="edit"]'));
+    this.setDeleteButtons(document.querySelectorAll('button[name="delete"]'));
     this.handleClickButton();
   }
 
   /**
    * Getter and Setter
    */
+
   public setRowId(rowId: number) {
     this.rowId = rowId;
   }
@@ -64,8 +67,11 @@ class App {
   public setEditButtons(editButtons: NodeListOf<Element> | null) {
     this.editButtons = editButtons;
   }
-  public getEditButtons(): NodeListOf<Element> | null {
-    return this.editButtons;
+  public setDeleteButtons(deleteButtons: NodeListOf<Element> | null) {
+    this.deleteButtons = deleteButtons;
+  }
+  public getDeleteButtons(): NodeListOf<Element> | null {
+    return this.deleteButtons;
   }
   public setAddButton(addButton: Element | null): void {
     this.addButton = addButton;
@@ -101,7 +107,7 @@ class App {
 
             try {
               this.setRowId(parseInt(targetElement.dataset.id!, 10));
-              
+
               await this.get().then((res) => {
                 if (res.status === 200) {
                   this.candidatModalFactory.setCandidatData(res.data.data[0]);
@@ -114,7 +120,30 @@ class App {
             this.setCandidatModal(
               this.candidatModalFactory.createModal(this.modalType)
             );
+            this.candidatModal.show();
+          });
+        });
+      }
+      if (this.deleteButtons) {
+        this.deleteButtons.forEach((deleteButton) => {
+          deleteButton.addEventListener("click", async (ev) => {
+            ev.preventDefault();
+            const targetElement = ev.target as HTMLElement;
+            this.setModalType(ModalType.Delete);
+            try {
+              this.setRowId(parseInt(targetElement.dataset.id!, 10));
 
+              await this.get().then((res) => {
+                if (res.status === 200) {
+                  this.candidatModalFactory.setCandidatData(res.data.data[0]);
+                }
+              });
+            } catch (error) {
+              throw new Error("can not get candidat data");
+            }
+            this.setCandidatModal(
+              this.candidatModalFactory.createModal(this.modalType)
+            );
             this.candidatModal.show();
           });
         });
