@@ -144,11 +144,12 @@ class BaseModel
 
 
     // Delete a specific record by ID
-    public function delete(int $id): bool
+    public function delete(array $data): bool
     {
-        $query = "DELETE FROM $this->tableName WHERE id = $id";
-        $result = $this->dataManipulator->executeQuery($query);
+        $id = $data[$this->id_key];
 
-        return !empty($result);
+        $query = "DELETE FROM $this->tableName WHERE $this->id_key = $id";
+        $result = $this->dataManipulator->executeQuery($query);
+        return true;
     }
 }

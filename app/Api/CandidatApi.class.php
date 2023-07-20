@@ -100,6 +100,23 @@ class CandidatApi extends Api
         }
     }
 
+    public function delete(): void
+    {
+        if ($this->verifySession()) {
+            if ($_SERVER["REQUEST_METHOD"] === "DELETE") {
+                if (!empty($this->requestData)) {
+                    // var_dump($this->requestData);
+                    $resp = $this->candidatModel->delete($this->requestData);
+                    if ($resp) {
+                        $this->sendResponse(200, ["message" => "Candidat deleted successfully"]);
+                    } else {
+                        $this->sendResponse(500, ["error" => "Error when trying to delete candidat"]);
+                    }
+                }
+            }
+        }
+    }
+
     private function verifySession(): bool
     {
         if (session_status() === PHP_SESSION_NONE) {

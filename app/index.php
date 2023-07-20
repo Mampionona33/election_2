@@ -100,6 +100,7 @@ final class App
         $this->router->post("/api/candidat", [$this->candidatApi, "create"]);
         $this->router->get("/api/candidat", [$this->candidatApi, "get"]);
         $this->router->put("/api/candidat", [$this->candidatApi, "update"]);
+        $this->router->delete("/api/candidat", [$this->candidatApi, "delete"]);
 
         $this->router->handleRequest();
     }
