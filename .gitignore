@@ -137,4 +137,4 @@ dist/
 mysql-data/
 */tmp/*
 
-.ipynb_checkpoints/
+.ipynb_checkpoints
