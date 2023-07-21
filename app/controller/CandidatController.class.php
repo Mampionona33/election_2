@@ -36,7 +36,7 @@ class CandidatController
         $this->setTable(new Table());
     }
 
-    public function renderTable(): void
+    public function render(): void
     {
         echo  $this->table->render();
     }

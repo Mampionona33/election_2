@@ -7,6 +7,7 @@ use views\HomePage;
 use views\LoginPage;
 use views\ManageAuthorization;
 use views\ManageCandidat;
+use views\RolePage;
 
 class PageController
 {
@@ -16,10 +17,15 @@ class PageController
     private $authController;
     private $manageCandidat;
     private $manageAuthorization;
+    private $rolePage;
 
     /**
      * getter and setter
      */
+    public function setRolePage(RolePage $rolePage):void
+    {
+        $this->rolePage = $rolePage;
+    }
     public function setManageAuthorization(ManageAuthorization $manageAuthorization): void
     {
         $this->manageAuthorization = $manageAuthorization;
