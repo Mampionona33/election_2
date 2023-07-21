@@ -22,7 +22,7 @@ class PageController
     /**
      * getter and setter
      */
-    public function setRolePage(RolePage $rolePage):void
+    public function setRolePage(RolePage $rolePage): void
     {
         $this->rolePage = $rolePage;
     }
@@ -91,6 +91,16 @@ class PageController
         $this->manageCandidat = new ManageCandidat($this->authController);
         $this->dashboard = new Dashboard($this->authController);
         $this->setManageAuthorization(new ManageAuthorization($this->authController));
+        $this->setRolePage(new RolePage($this->authController));
+    }
+
+    public function renderRolePage(): void
+    {
+        if (!$this->authController->isUserLogged()) {
+            $this->redirectToDashboard();
+            exit();
+        }
+        echo $this->rolePage->render();
     }
 
     public function renderHomePage(): void
